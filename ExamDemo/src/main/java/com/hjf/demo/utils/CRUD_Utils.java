@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class CRUD_Utils {
@@ -23,14 +24,29 @@ public class CRUD_Utils {
         return cnt == params.length;
     }
 
+    public static void setParameters(PreparedStatement ps,Object[] params) throws SQLException {
+        int num = 1;
+        //执行语句
+        for (Object param : params) {
+            if (param instanceof Object[]) {
+                Object[] objects = (Object[]) param;
+                for (Object object : objects) {
+                    ps.setObject(num, object);
+                    num++;
+                }
+            } else {
+                ps.setObject(num, param);
+                num++;
+            }
+        }
+    }
+
     public static int update(String sql,Object... params) throws InterruptedException, SQLException {
         if (checkPlaceholder(sql, params)) {
             //获取链接
             Connection connection = Connection_Pool.getConnection();
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                //执行语句
-                for (int i = 0; i < params.length; i++)
-                    ps.setObject(i + 1, params[i]);
+                setParameters(ps,params);
                 //返回影响的数据的条数
                 return ps.executeUpdate();
             } finally {
@@ -47,8 +63,7 @@ public class CRUD_Utils {
             Connection connection = Connection_Pool.getConnection();
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 //执行语句
-                for (int i = 0; i < params.length; i++)
-                    ps.setObject(i + 1, params[i]);
+                setParameters(ps,params);
                 try (ResultSet rs = ps.executeQuery()) {
                     return handler.handle(rs);
                 }

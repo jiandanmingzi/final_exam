@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Connection_Pool {
-    static volatile Queue<Connection> connections = new LinkedList<Connection>();
+    static volatile Queue<Connection> connections = new LinkedList<>();
     private static final ReentrantLock lock = new ReentrantLock();
     private static final int maxConnections;
 
@@ -51,14 +51,14 @@ public class Connection_Pool {
             if (connections.size()<maxConnections)
                 if (lock.tryLock(1, TimeUnit.SECONDS))
                 {
-                    if (connections.size()<maxConnections)
+                    if (connections.size()<maxConnections) {
                         try {
                             connections.add(connection);
                         } finally {
                             lock.unlock();
                         }
-                    else connection.close();
-                }
+                    }else connection.close();
+                }else connection.close();
             else connection.close();
         }
     }
