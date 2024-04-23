@@ -10,5 +10,5 @@ public interface UserService {
     User login(String account,String password) throws SQLException, InterruptedException;
     boolean signup(String account,String username,String password,String email,boolean admin) throws SQLException, InterruptedException;
     int checkData(String type, Object data) throws SQLException, InterruptedException;
-    User showUserInfo(String account) throws SQLException, InterruptedException;
+    User showUserInfo(int id) throws SQLException, InterruptedException;
 }

@@ -1,6 +1,7 @@
 package com.hjf.demo.Service;
 
 import com.hjf.demo.entity.Course;
+import com.hjf.demo.entity.Part;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -13,7 +14,8 @@ public interface CourseService {
     boolean creatCourse(boolean ready, String name, int maxStudent, String teacherName, String introduction, LocalDateTime startDate, LocalDateTime endDate, int teacherId) throws SQLException, InterruptedException;
     boolean changeMaxStudent(int maxStudent, int id);
     boolean changeTime(LocalDateTime startDate, LocalDateTime endDate, int id);
-    boolean deleteCourse(int id);
+    boolean deleteCourse(int id) throws SQLException, InterruptedException;
+     boolean setCourseUnready(int id, boolean ready) throws SQLException, InterruptedException;
     boolean checkName(String name) throws SQLException, InterruptedException;
     boolean addStudentToCourse(int id, Course course) throws InterruptedException, SQLException;
 }

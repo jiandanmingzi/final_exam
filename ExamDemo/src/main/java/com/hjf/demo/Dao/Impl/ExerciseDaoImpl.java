@@ -1,7 +1,7 @@
 package com.hjf.demo.Dao.Impl;
 
 import com.hjf.demo.Dao.ExerciseDao;
-import com.hjf.demo.entity.Exercises;
+import com.hjf.demo.entity.Exercise;
 import com.hjf.demo.utils.DAO_Utils;
 
 import java.sql.SQLException;
@@ -13,13 +13,13 @@ import java.util.Map;
 public class ExerciseDaoImpl implements ExerciseDao {
     private final String table = "exercises";
     @Override
-    public List<Exercises> select(String dataType, Object data, HashSet<String> type) throws SQLException, InterruptedException {
+    public List<Exercise> select(String dataType, Object data, HashSet<String> type) throws SQLException, InterruptedException {
         List<Map<String, Object>> Data = DAO_Utils.selection(table,dataType, data, type);
-        List<Exercises> list = null;
+        List<Exercise> list = null;
         if (Data != null && (!Data.isEmpty())) {
             list = new ArrayList<>();
             for (Map<String, Object> map : Data){
-                Exercises exercise = new Exercises();
+                Exercise exercise = new Exercise();
                 if (type.contains("content")){
                     exercise.setContent((String) map.get("content"));
                 }
@@ -29,8 +29,17 @@ public class ExerciseDaoImpl implements ExerciseDao {
                 if (type.contains("id")){
                     exercise.setId((int) map.get("id"));
                 }
+                if (type.contains("partId")){
+                    exercise.setPartId((int) map.get("partId"));
+                }
                 if (type.contains("type")){
                     exercise.setType((String) map.get("type"));
+                }
+                if (type.contains("sort")){
+                    exercise.setSort((int) map.get("sort"));
+                }
+                if (type.contains("courseId")){
+                    exercise.setCourseId((int) map.get("courseId"));
                 }
                 list.add(exercise);
             }

@@ -5,8 +5,11 @@ import com.hjf.demo.Dao.CourseAndUserDao;
 import com.hjf.demo.Dao.CourseDao;
 import com.hjf.demo.Dao.Impl.CourseAndUserDaoImpl;
 import com.hjf.demo.Dao.Impl.CourseDaoImpl;
+import com.hjf.demo.Dao.Impl.PartDaoImpl;
+import com.hjf.demo.Dao.PartDao;
 import com.hjf.demo.Service.CourseService;
 import com.hjf.demo.entity.Course;
+import com.hjf.demo.entity.Part;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -18,6 +21,7 @@ import java.util.Map;
 public class CourseServiceImpl implements CourseService {
     private final CourseDao courseDao = new CourseDaoImpl();
     private final CourseAndUserDao courseAndUserDao = new CourseAndUserDaoImpl();
+    private final PartDao partDao = new PartDaoImpl();
     @Override
     public List<Course> showTeacherCourse(int teacherId) throws SQLException, InterruptedException {
         return AllCourseFactory.getInstance().getCourses(teacherId);
@@ -69,13 +73,29 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public boolean deleteCourse(int id) {
-        return false;
+    public boolean deleteCourse(int id) throws SQLException, InterruptedException {
+        return courseDao.delete(id);
     }
 
     @Override
     public boolean checkName(String name) throws SQLException, InterruptedException {
         return (AllCourseFactory.getInstance().getCourseIdByName(name) != 0);
+    }
+
+    @Override
+    public boolean setCourseUnready(int id, boolean ready) throws SQLException, InterruptedException {
+        Course course = AllCourseFactory.getInstance().getCourse(id);
+        if (course!= null){
+            course.setReady(false);
+            Map<String, Object> map = new HashMap<>();
+            map.put("ready", ready);
+            if (courseDao.update(id, map)){
+                return true;
+            }else{
+                course.setReady(true);
+            }
+        }
+        return false;
     }
 
     @Override
@@ -105,4 +125,5 @@ public class CourseServiceImpl implements CourseService {
         }
         return false;
     }
+
 }

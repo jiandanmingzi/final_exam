@@ -3,7 +3,25 @@ package com.hjf.demo.entity;
 public class Part {
     private int id;
     private String partName;
+    private int courseId;
     private int sort;
+    private String identifier;
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
 
     public Part(){}
 

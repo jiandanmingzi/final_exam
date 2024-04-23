@@ -22,6 +22,9 @@ public class UserDaoImpl implements UserDao {
                 if (type.contains("introduction")) {
                     user.setIntroduction((String) map.get("introduction"));
                 }
+                if (type.contains(("authenticated"))){
+                    user.setAuthenticated((boolean) map.get("authenticated"));
+                }
                 if (type.contains("password")) {
                     user.setPassword((String) map.get("password"));
                 }

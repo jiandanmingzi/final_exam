@@ -12,4 +12,5 @@ public interface SectionDao {
     boolean add(Map<String, Object> map)throws SQLException, InterruptedException;
     boolean delete(int id) throws SQLException, InterruptedException;
     boolean update(int id, Map<String, Object> map) throws SQLException, InterruptedException;
+    boolean deleteThroughPath(int id, String path);
 }

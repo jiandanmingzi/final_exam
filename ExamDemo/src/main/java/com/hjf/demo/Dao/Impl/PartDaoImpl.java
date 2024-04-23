@@ -20,8 +20,14 @@ public class PartDaoImpl implements PartDao {
             list = new ArrayList<>();
             for (Map<String, Object> map : Data){
                 Part part = new Part();
+                if (type.contains("identifier")){
+                    part.setIdentifier((String) map.get("identifier"));
+                }
                 if (type.contains("partName")){
                     part.setPartName((String) map.get("partName"));
+                }
+                if (type.contains("courseId")){
+                    part.setCourseId((Integer) map.get("courseId"));
                 }
                 if (type.contains("sort")){
                     part.setSort((Integer) map.get("sort"));

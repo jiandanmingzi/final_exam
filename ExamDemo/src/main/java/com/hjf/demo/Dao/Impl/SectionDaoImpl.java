@@ -20,8 +20,23 @@ public class SectionDaoImpl implements SectionDao {
             list = new ArrayList<>();
             for (Map<String, Object> map : Data){
                Section section = new Section();
+               if (type.contains("introduction")){
+                   section.setIntroduction((String) map.get("introduction"));
+               }
                if (type.contains("sectionName")){
                    section.setSectionName((String) map.get("sectionName"));
+               }
+               if (type.contains("teacherId")){
+                   section.setTeacherId((int) map.get("teacherId"));
+               }
+               if (type.contains("courseId")){
+                   section.setCourseId((int) map.get("courseId"));
+               }
+               if (type.contains("partId")){
+                   section.setPartId((int) map.get("partId"));
+               }
+               if (type.contains("type")){
+                   section.setType((String) map.get("type"));
                }
                if (type.contains("path")){
                    section.setPath((String) map.get("path"));
@@ -51,5 +66,10 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     public boolean update(int id, Map<String, Object> map) throws SQLException, InterruptedException {
         return DAO_Utils.update(table, id ,map);
+    }
+
+    @Override
+    public boolean deleteThroughPath(int id, String path) {
+        return false;
     }
 }

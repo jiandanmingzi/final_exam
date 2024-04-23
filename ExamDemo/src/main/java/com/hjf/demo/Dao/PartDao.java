@@ -1,6 +1,5 @@
 package com.hjf.demo.Dao;
 
-import com.hjf.demo.entity.Exercises;
 import com.hjf.demo.entity.Part;
 
 import java.sql.SQLException;

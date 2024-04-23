@@ -18,36 +18,48 @@ public class Filter1_CheckUser implements Filter {
     private final Logger LOGGER = Logger.getLogger(Filter1_CheckUser.class.toString());
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        int status;
+        String message;
+        Object details;
         String authHeader = ((HttpServletRequest)request).getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request, response);
             try {
                 JWT_Utils.verify(authHeader.substring(7));
                 Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-                if (claims.get("id") != null && claims.get("account") != null && claims.get("admin") != null){
-                    int id = (int)claims.get("id");
-                    String account = (String)claims.get("account");
-                    if (id != new UserServiceImpl().checkData("account",account)){
-                        LOGGER.severe("Invalid authentication" );
-                        SetResponse_Utils.setResponse((HttpServletResponse) response,400,"false","请先登录");
+                if (claims.get("id") != null && claims.get("authenticated") != null && claims.get("admin") != null){
+                    if (!(boolean)claims.get("authenticated")){
+                        status = 400;
+                        message = "false";
+                        details = "请先完成实名制";
+                        SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
                         ((HttpServletResponse)response).sendRedirect("/login.html");
+                    }else{
+                        filterChain.doFilter(request,response);
                     }
                 }else{
                     LOGGER.severe("Invalid authentication" );
-                    SetResponse_Utils.setResponse((HttpServletResponse) response,400,"false","请先登录");
+                    status = 400;
+                    message = "false";
+                    details = "请先登录";
+                    SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
                     ((HttpServletResponse)response).sendRedirect("/login.html");
                 }
             }catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e){
                 LOGGER.severe("Invalid authentication:" + e.getMessage());
-                SetResponse_Utils.setResponse((HttpServletResponse) response,400,"false","请先登录");
+                status = 400;
+                message = "false";
+                details = "请先登录";
+                SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
                 ((HttpServletResponse)response).sendRedirect("/login.html");
-            } catch (SQLException | InterruptedException e) {
-                throw new RuntimeException(e);
             }
         }else{
             LOGGER.severe("Unlogged Access");
-            SetResponse_Utils.setResponse((HttpServletResponse) response,400,"false","请先登录");
+            status = 400;
+            message = "false";
+            details = "请先登录";
+            SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
             ((HttpServletResponse)response).sendRedirect("/login.html");
         }
+
     }
 }

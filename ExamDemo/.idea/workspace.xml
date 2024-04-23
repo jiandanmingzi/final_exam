@@ -10,11 +10,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4156667a-4c3f-447f-8ba3-59491b4f019c" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/CRUD_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/CRUD_Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/Connection_Pool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/Connection_Pool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/ExerciseDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/ExerciseDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/ExerciseDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/ExerciseDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/PartDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/PartDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/SectionDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/SectionDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/UserDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/PartDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/PartDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/SectionDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/SectionDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/PartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/PartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/SectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/SectionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter1_CheckUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter1_CheckUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Exercises.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Exercise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Part.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Part.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Section.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Section.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User_Exer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User_Exer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JSON_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JSON_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,8 +45,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -65,7 +85,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;Tomcat 服务器.Tomcat 9.0.87.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -75,7 +95,8 @@
     &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -152,6 +173,11 @@
       <workItem from="1713449259240" duration="9288000" />
       <workItem from="1713506979335" duration="32297000" />
       <workItem from="1713581533960" duration="43981000" />
+      <workItem from="1713661595807" duration="2068000" />
+      <workItem from="1713668093791" duration="32811000" />
+      <workItem from="1713749754612" duration="9522000" />
+      <workItem from="1713767741171" duration="14757000" />
+      <workItem from="1713788064871" duration="8617000" />
     </task>
     <servers />
   </component>

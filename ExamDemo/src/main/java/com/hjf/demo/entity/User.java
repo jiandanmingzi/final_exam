@@ -2,15 +2,24 @@ package com.hjf.demo.entity;
 
 public class User {
     private int id;
+    private String qq;
     private String email;
+    private String account;
     private String username;
     private String password;
     private String introduction;
-    private String account;
-    private String qq;
     private boolean admin;
+    private boolean authenticated;
 
     public User(){}
+
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
 
     public String getUsername() {
         return username;

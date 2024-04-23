@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
         HashSet<String> set = new HashSet<>();
         set.add("password");
         set.add("id");
+        set.add("authenticated");
+        set.add("admin");
         List<User> list = userDao.select("account",account,set);
         if (list != null && (!list.isEmpty())) {
             User user = list.getFirst();
@@ -63,6 +65,7 @@ public class UserServiceImpl implements UserService {
         map.put("email", email);
         map.put("admin", admin);
         map.put("account", account);
+        map.put("authenticated", false);
         return userDao.add(map);
     }
 
@@ -78,7 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User showUserInfo(String account) throws SQLException, InterruptedException {
+    public User showUserInfo(int id) throws SQLException, InterruptedException {
         HashSet<String> set = new HashSet<>();
         set.add("account");
         set.add("username");
@@ -86,6 +89,7 @@ public class UserServiceImpl implements UserService {
         set.add("admin");
         set.add("introduction");
         set.add("qq");
-        return userDao.select("account",account,set).getFirst();
+        set.add("authenticated");
+        return userDao.select("id",id,set).getFirst();
     }
 }

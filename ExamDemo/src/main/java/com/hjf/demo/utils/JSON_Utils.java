@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.ServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 
 public class JSON_Utils {
     public static JsonNode ReadJsonInRequest(ServletRequest request) throws IOException {
@@ -20,4 +21,12 @@ public class JSON_Utils {
         return objectMapper.readTree(requestBody);
     }
 
+    public static boolean checkNode(List<JsonNode> list){
+        for (JsonNode node : list) {
+            if (node == null || !node.isNull()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

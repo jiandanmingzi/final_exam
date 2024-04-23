@@ -1,11 +1,12 @@
 package com.hjf.demo.entity;
 
+import java.util.List;
+
 public class User_Exer {
-    private Course[] course;
     private int userId;
-    private int courseId;
-    private int grade;
-    private int courseNum;
-    private int accuracy;
-    private String belong_to;
+    private int partId;
+    private float accuracy;
+    private String identifier;
+    private List<Integer> rightId;
+    private List<Integer> wrongId;
 }

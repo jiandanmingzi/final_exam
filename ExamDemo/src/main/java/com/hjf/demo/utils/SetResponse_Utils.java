@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SetResponse_Utils {
-    public static void setResponse(HttpServletResponse response , int status, String message, String details) throws IOException {
+    public static void setResponse(HttpServletResponse response , int status, String message, Object details) throws IOException {
         Map<String,Object> map = new HashMap<>();
         map.put("status", status);
         map.put("message", message);

@@ -45,8 +45,8 @@ public class UserServlet extends BaseServlet{
         }else{
             Map<String , Object> map = new TreeMap<>();
             map.put("id", user.getId());
-            map.put("account", user.getAccount());
             map.put("admin", user.isAdmin());
+            map.put("authenticated", user.isAuthenticated());
             String token = JWT_Utils.getToken(map);
             SetResponse_Utils.setResponse(response ,300, "success", token);
             response.sendRedirect("/home.html");
@@ -56,7 +56,7 @@ public class UserServlet extends BaseServlet{
     public void signup(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException, NoSuchAlgorithmException {
         int status;
         String message;
-        String details;
+        Object details;
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         String account = rootNode.get("account").asText();
         String password = Encrypt_Utils.encrypt(rootNode.get("password").asText());
