@@ -1,7 +1,6 @@
 package com.hjf.demo.contoller.Servlet;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.hjf.demo.Dao.SectionDao;
 import com.hjf.demo.Service.*;
 import com.hjf.demo.Service.Impl.*;
 import com.hjf.demo.entity.Course;
@@ -33,6 +32,7 @@ public class UserAndCourseServlet extends BaseServlet{
     private final ExerciseService exerciseService = new ExerciseServiceImpl();
     private final PartService partService = new PartServiceImpl();
     private final SectionService sectionService = new SectionServiceImpl();
+    private final User_ExerService userExerService = new User_ExerServiceImpl();
     public void showMyInfo(HttpServletRequest request, HttpServletResponse response) throws SQLException, InterruptedException, IOException {
         String authHeader = request.getHeader("Authorization");
         int id = (int) JWT_Utils.getClaims(authHeader.substring(7)).get("id");
@@ -353,11 +353,12 @@ public class UserAndCourseServlet extends BaseServlet{
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
         boolean admin = (boolean)claims.get("admin");
+        int id = (int)claims.get("id");
         if (admin){
             details = "老师不能做题";
         }else {
-            int wrong = 0, right = 0;
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
+            Map<Integer, String> map = new HashMap<>();
             for (JsonNode node : rootNode) {
                 JsonNode answer = node.get("answer");
                 JsonNode exerciseId = node.get("exerciseId");
@@ -365,13 +366,9 @@ public class UserAndCourseServlet extends BaseServlet{
                 list.add(exerciseId);
                 list.add(answer);
                 if (JSON_Utils.checkNode(list)) {
-                    if(answer.asText().equals(exerciseService.getExercises(exerciseId.asInt()).getAnswer())){
-                        right++;
-                    }else {
-                        wrong++;
-                    }
-
+                    map.put(exerciseId.asInt(), answer.asText());
                 }
+                userExerService.checkAnswer(id, map);
             }
             status = 200;
             message = "success";

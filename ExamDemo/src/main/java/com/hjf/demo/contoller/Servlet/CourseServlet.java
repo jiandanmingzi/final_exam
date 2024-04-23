@@ -3,18 +3,9 @@ package com.hjf.demo.contoller.Servlet;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.hjf.demo.Bean.AllCourseBrief;
 import com.hjf.demo.Bean.AllCourseFactory;
-import com.hjf.demo.Service.CourseService;
-import com.hjf.demo.Service.ExerciseService;
-import com.hjf.demo.Service.Impl.CourseServiceImpl;
-import com.hjf.demo.Service.Impl.ExerciseServiceImpl;
-import com.hjf.demo.Service.Impl.PartServiceImpl;
-import com.hjf.demo.Service.Impl.SectionServiceImpl;
-import com.hjf.demo.Service.PartService;
-import com.hjf.demo.Service.SectionService;
-import com.hjf.demo.entity.Course;
-import com.hjf.demo.entity.Exercise;
-import com.hjf.demo.entity.Part;
-import com.hjf.demo.entity.Section;
+import com.hjf.demo.Service.*;
+import com.hjf.demo.Service.Impl.*;
+import com.hjf.demo.entity.*;
 import com.hjf.demo.utils.JSON_Utils;
 import com.hjf.demo.utils.JWT_Utils;
 import com.hjf.demo.utils.SetResponse_Utils;
@@ -36,6 +27,7 @@ public class CourseServlet extends BaseServlet{
     private final CourseService courseService = new CourseServiceImpl();
     private final PartService partService = new PartServiceImpl();
     private final ExerciseService exerciseService = new ExerciseServiceImpl();
+    private final User_ExerService userExerService = new User_ExerServiceImpl();
 
     public void getCourseCount (HttpServletRequest request, HttpServletResponse response) throws SQLException, InterruptedException, IOException {
         AllCourseBrief allCourseBrief = AllCourseFactory.getInstance();
@@ -122,10 +114,6 @@ public class CourseServlet extends BaseServlet{
         SetResponse_Utils.setResponse(response, status, message, details);
     }
 
-    public void getExerciseNum(HttpServletRequest request, HttpServletResponse response){
-
-    }
-
     public void showPartExercise(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
         int status = 400;
         String message = "false";
@@ -149,16 +137,28 @@ public class CourseServlet extends BaseServlet{
                     if ( admin && userId != course.getTeacherId()){
                         details = "不可窃取其他老师的知识成果";
                     }else {
+                        String identifier = userId + "_" + partId;
+                        User_Exer userExer = userExerService.getUser_Exer(identifier);
+                        boolean done = userExer != null;
+                        Map<String, Object> detail = new HashMap<>();
+                        detail.put("done", done);
+                        if(done){
+                            detail.put("RightAnswer", userExer.getRightExerciseMap());
+                            detail.put("WrongAnswer", userExer.getWrongExerciseMap());
+                            detail.put("accuracy", userExer.getAccuracy());
+                        }
                         List<Map<String, Object>> maps = new ArrayList<>();
                         for (Exercise exercise : exercises) {
                             Map<String, Object> map = ExerciseToMap(exercise);
-                            if (admin)
+                            if (admin || done) {
                                 map.put("answer", exercise.getAnswer());
+                            }
                             maps.add(map);
                         }
+                        detail.put("exer", maps);
                         status = 200;
                         message = "success";
-                        details = maps;
+                        details = detail;
                     }
                 }else{
                     details = "课程不存在";

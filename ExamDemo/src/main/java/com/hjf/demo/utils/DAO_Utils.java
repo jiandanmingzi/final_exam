@@ -60,4 +60,9 @@ public class DAO_Utils {
         String sql = "DELETE FROM " + table + " WHERE id = ?";
         return (CRUD_Utils.update(sql, id) == 1);
     }
+
+    public static void deleteAll(String table, String dataType, Object data) throws SQLException, InterruptedException {
+        String sql = "DELETE FROM " + table + " WHERE " + dataType + " = ?";
+        CRUD_Utils.update(sql, data);
+    }
 }

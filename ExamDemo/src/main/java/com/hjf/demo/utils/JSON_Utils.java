@@ -17,8 +17,7 @@ public class JSON_Utils {
             stringBuilder.append(line).append("\n");
         }
         String requestBody = stringBuilder.toString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readTree(requestBody);
+        return new ObjectMapper().readTree(requestBody);
     }
 
     public static boolean checkNode(List<JsonNode> list){
