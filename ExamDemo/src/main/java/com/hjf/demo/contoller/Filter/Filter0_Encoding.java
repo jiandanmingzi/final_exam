@@ -14,7 +14,6 @@ public class Filter0_Encoding implements Filter {
         reReadableHttpServletRequest req = new reReadableHttpServletRequest((HttpServletRequest) request);
         req.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
         chain.doFilter(req, response);
     }
 }

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人主页</title>
+</head>
+<body>
+    <div id="information">
+        <a href="http://localhost:8080/ExamDemo_war_exploded/home.html">返回首页</a>
+        <br>
+        <a href="http://localhost:8080/ExamDemo_war_exploded/allCourse.html">查看所有课程</a>
+        <br>
+        <a href="http://localhost:8080/ExamDemo_war_exploded/myCourse.html">查看我的课程</a>
+        <br>
+        <a href="http://localhost:8080/ExamDemo_war_exploded/exerciseHistory.html">查看我的历史做题记录</a>
+        <p>个人信息</p>
+        <p>昵称：<span id="username"></span></p>
+        <p>账号: <span id="account"></span></p>
+        <p>邮箱：<span id="email"></span></p>
+        <p>qq:<span id="qq"></span></p>
+        <p>身份：<span id="admin"></span></p>
+        <p>个人介绍: <span id="introduction"></span></p>
+        <p>实名信息：</p>
+        <p>真实姓名: <span id="realName"></span></p>
+    </div>
+    <button id="changeAccountInfo">修改账号信息</button>
+    <div id="accountInfo">
+        <button id="submitAccountInfo" class="bound-input">提交</button>
+        <button id="cancelAccountInfo" class="bound-input">取消</button>
+        <br>
+        <label for="newName" class="bound-input">修改昵称：</label>
+        <br>
+        <input type="text" id="newName" value="" class="bound-input" required>
+        <br>
+        <label for="newEmail" class="bound-input">修改邮箱：</label>
+        <br>
+        <input type="text" id="newEmail" value="" class="bound-input" required>
+        <br>
+        <label for="newQQ" class="bound-input">修改qq：</label>
+        <br>
+        <input type="text" id="newQQ" value="" class="bound-input" required>
+        <br>
+        <label for="newIntroduction" class="bound-input">修改个人介绍：</label>
+        <br>
+        <textarea id="newIntroduction" class="bound-input" required rows="4" cols="30"></textarea>
+        <br>
+    </div>
+    <button id="changeSelfInfo">修改实名信息</button>
+    <div id="selfInfo">
+        <button id="submitSelfInfo" class="bound-input">提交</button>
+        <button id="cancelSelfInfo" class="bound-input">取消</button>
+        <br>
+        <label for="newRealName" class="bound-input">修改真实姓名：</label>
+        <br>
+        <input type="text" id="newRealName" value="" class="bound-input" required>
+        <br>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var admin = false;
+    function getData() {
+        return $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                }
+            },
+            data: JSON.stringify({
+                method: 'showMyInfo'
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    $('#username').text(response.details.username);
+                    $('#account').text(response.details.account);
+                    $('#email').text(response.details.email);
+                    $('#qq').text(response.details.qq);
+                    $('#realName').text(response.details.realName);
+                    $('#introduction').text(response.details.introduction);
+                    admin = response.details.admin;
+                    var newBr = $('<br>');
+                    if (response.details.admin) {
+                        $('#admin').text('老师');
+                        var teachElement = $('<p>教授学科: <span id="teach"></span></p>');
+                        $('#teach', teachElement).text(response.details.teach);
+                        $('#information').append(teachElement);
+                        var newTeachLabel = $('<label for="newTeach" class="bound-input">修改教授学科：</label>');
+                        var newTeach = $('<input type="text" id="newTeach" value="" class="bound-input" required>');
+                        $('#newTeach', newTeach).val(response.details.teach);
+                        $('#changeSelfInfo').append(newTeachLabel, newBr, newTeach, newBr);
+                    } else {
+                        $('#admin').text('学生');
+                        var studentIdElement = $('<p>学号：<span id="studentId"><span></p>');
+                        $('#studentId', studentIdElement).text("学号：" + response.details.studentId);
+                        var collegeElement = $('<p>学院：<span id="college"></span></p>');
+                        $('#college', collegeElement).text(response.details.college);
+                        var majorElement = $('<p>专业：<span id="major"></span></p>');
+                        $('#major', majorElement).text(response.details.major);
+                        var gradeElement = $('<p>年级：<span id="grade"></span></p>');
+                        $('#grade', gradeElement).text(response.details.grade);
+                        var clazzElement = $('<p>班级：<span id="clazz"></span></p>');
+                        $('#clazz', clazzElement).text(response.details.clazz);
+                        $('#information').append(studentIdElement, collegeElement, majorElement, gradeElement, clazzElement);
+                        var newStudentIdLabel = $('<label for="newStudentId" class="bound-input">修改学号：</label>');
+                        var newStudentId = $('<input type="text" id="newStudentId" value="" class="bound-input" required>');
+                        $('#newStudentId', newStudentId).val(response.details.studentId);
+                        var newCollegeLabel = $('<label for="newCollege" class="bound-input">修改学院：</label>');
+                        var newCollege = $('<input type="text" id="newCollege" value="" class="bound-input" required>');
+                        $('#newCollege', newCollege).val(response.details.college);
+                        var newMajorLabel = $('<label for="newMajor" class="bound-input">修改专业：</label>');
+                        var newMajor = $('<input type="text" id="newMajor" value="" class="bound-input" required>');
+                        $('#newMajor', newMajor).val(response.details.major);
+                        var newGradeLabel = $('<label for="newGrade" class="bound-input">修改年级：</label>');
+                        var newGrade = $('<input type="text" id="newGrade" value="" class="bound-input" required>');
+                        $('#newGrade', newGrade).val(response.details.grade);
+                        var newClazzLabel = $('<label for="newClazz" class="bound-input">修改班级：</label>');
+                        var newClazz = $('<input type="text" id="newClazz" value="" class="bound-input" required>');
+                        $('#newClazz', newClazz).val(response.details.clazz);
+                        $('#changeSelfInfo').append(newStudentIdLabel, newBr, newStudentId, newBr, newCollegeLabel, newBr, newCollege, newBr, newMajorLabel, newBr, newMajor, newBr, newGradeLabel, newBr, newGrade, newBr, newClazzLabel, newBr, newClazz, newBr);
+                    }
+                } else {
+                    alert(response.details);
+                }
+            },
+            error: function (data) {
+                alert(data.details);
+            }
+        });
+    }
+    $(document).ready(function() {
+        getData();
+        $('#accountInfo .bound-input').hide();
+        $('#selfInfo .bound-input').hide();
+        $('#changeAccountInfo').click(function() {
+            $('#accountInfo .bound-input').show();
+        });
+        $('#cancelAccountInfo').click(function() {
+            $('#accountInfo .bound-input').hide();
+        });
+        $('#changeSelfInfo').click(function() {
+            $('#selfInfo .bound-input').show();
+        });
+        $('#cancelSelfInfo').click(function() {
+            $('#selfInfo .bound-input').hide();
+        });
+        $('#submitAccountInfo').click(function() {
+            var newName = $('#newName').val();
+            var newEmail = $('#newEmail').val();
+            var newQQ = $('#newQQ').val();
+            var newIntroduction = $('#newIntroduction').val();
+            $.ajax({
+                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                beforeSend: function (xhr) {
+                    var token = sessionStorage.getItem('token');
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                    }
+                },
+                data: JSON.stringify({
+                    method: 'changeAccountInfo',
+                    newName: newName,
+                    newEmail: newEmail,
+                    newQQ: newQQ,
+                    newIntroduction: newIntroduction
+                }),
+                success: function (response) {
+                    if (response.message === "success") {
+                        alert("修改成功");
+                        getData();
+                    } else {
+                        alert(response.details);
+                    }
+                },
+                error: function (data) {
+                    alert(data.details);
+                }
+            });
+        });
+        $('#submitSelfInfo').click(function() {
+            var newRealName = $('#newRealName').val();
+            if (admin) {
+                var newTeach = $('#newTeach').val();
+                $.ajax({
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        var token = sessionStorage.getItem('token');
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                        }
+                    },
+                    data: JSON.stringify({
+                        method: 'changeSelfInfo',
+                        newRealName: newRealName,
+                        newTeach: newTeach
+                    }),
+                    success: function (response) {
+                        if (response.message === "success") {
+                            alert("修改成功");
+                            getData();
+                        } else {
+                            alert(response.details);
+                        }
+                    },
+                    error: function (data) {
+                        alert(data.details);
+                    }
+                });
+            } else {
+                var newStudentId = $('#newStudentId').val();
+                var newCollege = $('#newCollege').val();
+                var newMajor = $('#newMajor').val();
+                var newGrade = $('#newGrade').val();
+                var newClazz = $('#newClazz').val();
+                $.ajax({
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        var token = sessionStorage.getItem('token');
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                        }
+                    },
+                    data: JSON.stringify({
+                        method: 'changeSelfInfo',
+                        newRealName: newRealName,
+                        newStudentId: newStudentId,
+                        newCollege: newCollege,
+                        newMajor: newMajor,
+                        newGrade: newGrade,
+                        newClazz: newClazz
+                    }),
+                    success: function (response) {
+                        if (response.message === "success") {
+                            alert("修改成功");
+                            getData();
+                        } else {
+                            alert(response.details);
+                        }
+                    },
+                    error: function (data) {
+                        alert(data.details);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</html>

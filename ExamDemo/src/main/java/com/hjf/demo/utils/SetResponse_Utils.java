@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class SetResponse_Utils {
     public static void setResponse(HttpServletResponse response , int status, String message, Object details) throws IOException {
+        response.setContentType("application/json");
         Map<String,Object> map = new HashMap<>();
         map.put("status", status);
         map.put("message", message);

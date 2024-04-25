@@ -55,7 +55,7 @@ public class CourseServiceImpl implements CourseService {
             List<Course> courses = courseDao.select("courseName",name,set);
             if (courses!= null && (!courses.isEmpty())){
                 Course course = new Course(teacherId ,name , 0, maxStudent, teacherName, introduction, startDate, endDate,ready);
-                course.setId(courses.getFirst().getId());
+                course.setId(courses.get(0).getId());
                 return true;
             }
         }
@@ -126,4 +126,10 @@ public class CourseServiceImpl implements CourseService {
         return false;
     }
 
+    @Override
+    public List<Course> showStudentCourse(int id) throws SQLException, InterruptedException {
+        HashSet<String> set = new HashSet<>();
+        set.add("id");
+        return courseAndUserDao.selectCourse("userId", id, set);
+    }
 }

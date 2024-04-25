@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 
-@WebServlet("/verifyCode")
+@WebServlet("/verifyCodeServlet")
 public class VerifyCodeServlet extends BaseServlet{
     public void sendEmailCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
@@ -58,7 +58,7 @@ public class VerifyCodeServlet extends BaseServlet{
             request.getSession().removeAttribute(codeType);
             SetResponse_Utils.setResponse(response ,200, "success", "验证通过");
         }else{
-            SetResponse_Utils.setResponse(response ,400, "false", "验证码错误");
+            SetResponse_Utils.setResponse(response ,200, "false", "验证码错误");
         }
     }
 }

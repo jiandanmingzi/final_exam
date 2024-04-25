@@ -53,7 +53,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         set.add("answer");
         List<Exercise> list = exerciseDao.select("id", id, set);
         if (list != null && !list.isEmpty()) {
-            return list.getFirst();
+            return list.get(0);
         }
         return null;
     }

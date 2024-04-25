@@ -2,7 +2,7 @@
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="IU-241.14494.240">
     <data-source name="@localhost" uuid="109c73ef-8efe-4d83-a112-684129c63de9">
-      <database-info product="MySQL" version="8.3.0" jdbc-version="4.2" driver-name="Amazon Web Services (AWS) JDBC Driver for MySQL" driver-version="aws-mysql-connector-java-1.1.9 (Revision: 122bff765e786a47605d9586910f911cb87f3733)" dbms="MYSQL" exact-version="8.3.0" exact-driver-version="1.1">
+      <database-info product="MySQL" version="8.3.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="8.3.0" exact-driver-version="8.2">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
@@ -11,7 +11,10 @@
       <user-name>root</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="@" />
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="demo" />
+          </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>

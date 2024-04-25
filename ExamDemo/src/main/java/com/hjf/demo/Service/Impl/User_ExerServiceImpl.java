@@ -57,7 +57,7 @@ public class User_ExerServiceImpl implements User_ExerService {
         set.add("wrongExercise");
         List<User_Exer> list = user_exerciseDao.getUser_Exer("identifier", identifier, set);
         if(list != null && !list.isEmpty()) {
-            return list.getFirst();
+            return list.get(0);
         }
         return null;
     }

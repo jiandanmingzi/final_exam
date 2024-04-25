@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         set.add("id");
         List<User> list = userDao.select("account", account, set);
         if (list != null && (!list.isEmpty())) {
-            int id = list.getFirst().getId();
+            int id = list.get(0).getId();
             return userDao.update(id,map);
         }
         return false;
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         set.add("admin");
         List<User> list = userDao.select("account",account,set);
         if (list != null && (!list.isEmpty())) {
-            User user = list.getFirst();
+            User user = list.get(0);
             if (user.getPassword().equals(password)) {
                 return user;
             }
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         set.add("id");
         List<User> list = userDao.select(type,data,set);
         if (list != null && (!list.isEmpty())){
-            return list.getFirst().getId();
+            return list.get(0).getId();
         }
         return 0;
     }
@@ -90,6 +90,13 @@ public class UserServiceImpl implements UserService {
         set.add("introduction");
         set.add("qq");
         set.add("authenticated");
-        return userDao.select("id",id,set).getFirst();
+        return userDao.select("id",id,set).get(0);
+    }
+    
+    @Override
+    public boolean changeData(String dataType, Object data,int id) throws SQLException, InterruptedException {
+        Map<String, Object> map = new HashMap<>();
+        map.put(dataType, data);
+        return userDao.update(id, map);
     }
 }

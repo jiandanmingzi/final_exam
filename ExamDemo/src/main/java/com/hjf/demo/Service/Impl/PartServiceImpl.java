@@ -20,6 +20,7 @@ public class PartServiceImpl implements PartService {
         set.add("id");
         set.add("partName");
         set.add("sort");
+        set.add("hasExercises");
         return partDao.select("courseId", courseId, set);
     }
 
@@ -32,7 +33,7 @@ public class PartServiceImpl implements PartService {
         set.add("sort");
         List<Part> parts = partDao.select("courseId", id, set);
         if (parts != null && !parts.isEmpty()){
-            return parts.getFirst();
+            return parts.get(0);
         }
         return null;
     }
@@ -43,7 +44,7 @@ public class PartServiceImpl implements PartService {
         set.add("id");
         List<Part> parts = partDao.select("identifier", identifier,set);
         if (parts != null && !parts.isEmpty()){
-            return parts.getFirst();
+            return parts.get(0);
         }
         return null;
     }

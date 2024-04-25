@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>展示所有课程</title>
+</head>
+<body>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var totalCourse = 0;
+    var courseNum = 0;
+    function getSomeCourse(start, num){
+        var newHr = $("<hr>");
+        var newBr = $("<br>");
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "getSomeCourses",
+                "start": start,
+                "num": num
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    $.each(response.details, function (index, item) {
+                        var newCourse = $("<a href='http://localhost:8080/ExamDemo_war_exploded/course/courseDetail.html?courseId=" + item.courseId + "'>" + item.courseName + "</a>");
+                        var newStudentNum = $("<p>学生人数：" + item.student + "</p>");
+                        var maxStudent = $("<p>最大人数：" + item.maxStudent + "</p>");
+                        var newTeacher = $("<p>课程老师:<a href='http://localhost:8080/ExamDemo_war_exploded/user/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a></p>");
+                        var newStartTime = $("<p>开始日期：" + item.startDate + "</p>");
+                        var newEndTime = $("<p>结束日期：" + item.endDate + "</p>");
+                        $("body").append(newHr, newCourse, newStartTime, maxStudent, newBr, newTeacher, newStartTime, newEndTime);
+                        courseNum++
+                    });
+                }
+            }
+        });
+    }
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "getCourseNum"
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    totalCourse = response.details;
+                    getSomeCourse(0, 10);
+                }
+            }
+        });
+        $(window).scroll(function(){
+            if($(document).scrollTop() >= $(document).height() - $(window).height()){
+                if(courseNum < totalCourse){
+                    getSomeCourse(courseNum, 10);
+                }
+            }
+        });
+    });
+</script>
+</html>

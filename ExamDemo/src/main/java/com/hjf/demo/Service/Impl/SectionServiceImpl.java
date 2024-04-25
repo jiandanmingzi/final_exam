@@ -91,7 +91,7 @@ public class SectionServiceImpl implements SectionService {
         set.add("courseId");
         List<Section> list = sectionDao.select("id", id, set);
         if (list!= null && (!list.isEmpty())){
-            return list.getFirst();
+            return list.get(0);
         }
         return null;
     }

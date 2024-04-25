@@ -26,6 +26,9 @@ public class PartDaoImpl implements PartDao {
                 if (type.contains("partName")){
                     part.setPartName((String) map.get("partName"));
                 }
+                if(type.contains("hasExercises")){
+                    part.setHasExercises((Boolean) map.get("hasExercises"));
+                }
                 if (type.contains("courseId")){
                     part.setCourseId((Integer) map.get("courseId"));
                 }

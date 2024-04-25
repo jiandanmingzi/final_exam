@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <p>sbedge</p>
+    <form>
+        <label for="username">用户名:</label>
+        <br>
+        <input placeholder="请输入用户名" type="text" id="username" required>
+        <br>
+        <br>
+        <label for="userAccount">账号:</label>
+        <br>
+        <input placeholder="请输入账号" type="text" id="userAccount" required>
+        <br>
+        <br>
+        <label for="email">邮箱:</label>
+        <br>
+        <input placeholder="请输入账号" type="text" id="email" required>
+        <span>@qq.com</span>
+        <br>
+        <br>
+        <label for="passWord">密码:</label>
+        <br>
+        <input placeholder="请输入密码" type="password" id="passWord" required>
+        <br>
+        <br>
+        <label for="RepassWord">再次输入密码:</label>
+        <br>
+        <input placeholder="再次输入密码" type="password" id="RepassWord" required>
+        <br>
+        <br>
+        <label for="verifyCode">验证码:</label>
+        <br>
+        <input placeholder="请输入验证码" type="text" id="verifyCode">
+        <img id="codeImg" src="http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet?method=getPictureCode">
+        <button id="changeImg">看不清?</button>
+        <br>
+        <br>
+        <button id="loginBtn" >前往登陆</button>
+        <button id="registerBtn" disabled>注册</button>
+        <div id="message" class="error"></div>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var accountCheck = false;
+        var passwordCheck = false;
+        var emailCheck = false;
+        $('#userAccount, #passWord, #verifyCode, #RepassWord, #email, #username').on('input', function() {
+            var verifycode = $('#verifyCode').val();
+            var username = $('#username').val();
+            var registerBtn = $('#registerBtn');
+            if (accountCheck && passwordCheck && emailCheck && verifycode && username) {
+                registerBtn.prop('disabled', false);
+            } else {
+                registerBtn.prop('disabled', true);
+            }
+        });
+        $('#passWord').blur(function (){
+            var password = $('#passWord').val();
+            var rePassword = $('#RepassWord').val();
+            if (password){
+                if(password.length<=12&&password.length>=6){
+                    if (password === rePassword){
+                        $('#message').text('').show();
+                        passwordCheck = true;
+                    }else {
+                        $('#message').text('两次输入的密码必须一致').show();
+                        passwordCheck = false;
+                    }
+                }else {
+                    $('#message').text('密码不得少于6位，多于12位').show();
+                    passwordCheck = false;
+                }
+            }else{
+                $('#message').text('请输入密码').show();
+                passwordCheck = false;
+            }
+        });
+        $('#RepassWord').blur(function (){
+            var password = $('#passWord').val();
+            var rePassword = $('#RepassWord').val();
+            if (password){
+                if(password.length<=12&&password.length>=6){
+                    if (password === rePassword){
+                        passwordCheck = true;
+                        $('#message').text('').show();
+                    }else {
+                        $('#message').text('两次输入的密码必须一致').show();
+                        passwordCheck = false;
+                    }
+                }else {
+                    $('#message').text('密码不得少于6位，多于12位').show();
+                    passwordCheck = false;
+                }
+            }else{
+                $('#message').text('请输入密码').show();
+                passwordCheck = false;
+            }
+        });
+        $('#userAccount').blur(function (){
+            var account = $('#userAccount').val();
+            if(account.length<=12&&account.length>=6) {
+                $.ajax({
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        method: 'checkAccount',
+                        account:account
+                    }), success: function (response) {
+                        if (response.message === "success") {
+                            accountCheck = true;
+                        } else {
+                            $('#message').text(response.details).show();
+                            accountCheck = false;
+                        }
+                    },
+                    error: function () {
+                        $('#message').text('请求失败，请检查您的网络连接。').show();
+                    }
+                })
+            }else {
+                $('#message').text("账号不得少于6位，多于12位").show();
+                accountCheck = false;
+            }
+        });
+        $('#email').blur(function (){
+            var email = $('#email').val();
+            $.ajax({
+                url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    method: 'checkEmail',
+                    email:email
+                }), success: function (response) {
+                    if (response.message === "success") {
+                        emailCheck = true;
+                    } else {
+                        $('#message').text(response.details).show();
+                        emailCheck = false;
+                    }
+                },
+                error: function () {
+                    $('#message').text('请求失败，请检查您的网络连接。').show();
+                }
+            })
+        });
+        $('#loginBtn').click(function () {
+            window.location.href = "http://localhost:8080/ExamDemo_war_exploded/signup.html";
+        });
+        $('#registerBtn').click(function () {
+            var account = $('#userAccount').val();
+            var password = $('#passWord').val();
+            var verifycode = $('#verifyCode').val();
+            var email = $('#email').val();
+            var username = $('#username').val();
+            $.ajax({
+                url: "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet",
+                type: 'POST',
+                contentType: 'application/json',
+                data:JSON.stringify({
+                    method:'VerifyCode',
+                    codeType:'PictureCode',
+                    userCode:verifycode
+                }),success : function (response){
+                    if (response.message === "success"){
+                        $.ajax({
+                            url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                method: 'signup',
+                                account: account,
+                                password: password,
+                                email:email,
+                                username:username
+                            }),
+                            success: function (response) {
+                                if (response.message === "success") {
+                                    alert(response.details);
+                                    window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/login.html';
+                                } else {
+                                    $('#message').text(response.details).show();
+                                }
+                            },
+                            error: function () {
+                                $('#message').text('请求失败，请检查您的网络连接。').show();
+                            }
+                        })
+                    }else {
+                        $('#message').text(response.details).show();
+                    }
+                },
+                error: function() {
+                    $('#message').text('请求失败，请检查您的网络连接。').show();
+                }
+            })
+        });
+        $('#changeImg').click(function () {
+            var newSrc = "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet?method=getPictureCode&" + new Date().getMilliseconds();
+            $("#codeImg").attr("src", newSrc);
+        });
+
+    });
+</script>
+</html>

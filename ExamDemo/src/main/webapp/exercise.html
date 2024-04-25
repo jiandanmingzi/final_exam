@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>习题</title>
+</head>
+<body>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var url = new URL(window.location.href);
+    var partId = +url.searchParams.get("partId");
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "showPartExercise",
+                "partId": partId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    response.details.sort(function(a, b){
+                        return a.Esort - b.Esort;
+                    });
+                    $.each(response.details, function (index, item) {
+                        if(item.type === "choice"){
+                            var newExercise = $("<p>第 " + item.Esort + " 题：" + item.content + "</p>");
+                            var newChoice = $("<p>选项：</p>");
+                            $.each(item.choice, function(index, choice){
+                                newChoice.append("<p>" + choice + "</p>");
+                            });
+                            newExercise.append(newChoice);
+                        }
+                        $("body").append(newExercise);
+                    });
+                }
+            }
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学习小节</title>
+</head>
+<body>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var url = new URL(window.location.href);
+    var sectionId = +url.searchParams.get("sectionId");
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "study",
+                "sectionId": sectionId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    document.title = response.details.sectionName;
+                    var newSection = $("<p>小节名称：" + response.details.sectionName + "</p>");
+                    var newContent;
+                    if(response.details.type === "video"){
+                        newContent = $("<video src='" + response.details.path + "' controls='controls'></video>");
+                    }else{
+                        newContent = $("<p>" + response.details.content + "</p>");
+                    }
+                    $("body").append(newSection, newContent);
+                }
+            }
+        })
+    })
+</script>
+</html>

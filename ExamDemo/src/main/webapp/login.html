@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<p>sbedge</p>
+    <form>
+        <label for="userAccount">账号:</label>
+        <br>
+        <input placeholder="请输入账号" type="text" id="userAccount" required>
+        <br>
+        <br>
+        <label for="passWord">密码:</label>
+        <br>
+        <input placeholder="请输入密码" type="password" id="passWord" required>
+        <br>
+        <br>
+        <label for="verifyCode">验证码:</label>
+        <br>
+        <input placeholder="请输入验证码" type="text" id="verifyCode">
+        <img id="codeImg" src="http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet?method=getPictureCode">
+        <button id="changeImg">看不清?</button>
+        <br>
+        <br>
+        <button id="loginBtn" disabled>登陆</button>
+        <button id="registerBtn">注册</button>
+        <button id="forgotPwdBtn">忘记密码</button>
+        <div id="message" class="error"></div>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+
+        $('#userAccount, #passWord, #verifyCode').on('input', function() {
+            var account = $('#userAccount').val();
+            var password = $('#passWord').val();
+            var verifycode = $('#verifyCode').val();
+            var loginBtn = $('#loginBtn');
+
+            if (account && password && verifycode) {
+                loginBtn.prop('disabled', false);
+            } else {
+                loginBtn.prop('disabled', true);
+            }
+        });
+        $('#changeImg').click(function (){
+            var newSrc = "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet?method=getPictureCode&"+new Date().getMilliseconds();
+            $("#codeImg").attr("src", newSrc);
+        })
+
+        // 登陆按钮点击事件
+        $('#loginBtn').click(function() {
+            var account = $('#userAccount').val();
+            var password = $('#passWord').val();
+            var verifycode = $('#verifyCode').val();
+            if (account.length <= 12 && password.length >= 6 && password.length <= 12) {
+                $.ajax({
+                    url: "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet",
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data:JSON.stringify({
+                        method:'VerifyCode',
+                        codeType:'PictureCode',
+                        userCode:verifycode
+                    }),success : function (response){
+                        if (response.message === "success"){
+                            $.ajax({
+                                url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
+                                type: 'POST',
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    method: 'login',
+                                    account: account,
+                                    password: password
+                                }),
+                                success: function (response) {
+                                    if (response.message === "success") {
+                                        sessionStorage.setItem('token', response.details);
+                                        window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/home.html';
+                                    } else {
+                                        $('#message').text(response.details).show();
+                                    }
+                                },
+                                error: function () {
+                                    $('#message').text('请求失败，请检查您的网络连接。').show();
+                                }
+                            })
+                        }else {
+                            $('#message').text(response.details).show();
+                        }
+                    },
+                    error: function() {
+                        $('#message').text('请求失败，请检查您的网络连接。').show();
+                    }
+                })
+            } else {
+                $('#message').text('账号不超过12位，密码应在6到12位之间。').show();
+            }
+        });
+        $('#registerBtn').click(function() {
+            window.location.href = "http://localhost:8080/ExamDemo_war_exploded/signup.html";
+        });
+        $(' #forgotPwdBtn').click(function() {
+            window.location.href = "http://localhost:8080/ExamDemo_war_exploded/forgetPassword.html";
+        });
+    });
+</script>
+</html>

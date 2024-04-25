@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var newHr = $("<hr>");
+    var newBr = $("<br>");
+    var url = new URL(window.location.href);
+    var courseId = +url.searchParams.get("courseId");
+    function showPartSection(partId){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "showPartSection",
+                "partId": partId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    response.details.sort(function(a, b){
+                        return a.Ssort - b.Ssort;
+                    });
+                    $.each(response.details, function (index, item) {
+                        var newSection = $("<a href='http://localhost:8080/ExamDemo_war_exploded/section.html?sectionId=" + item.id + "'>第 " + item.Ssort + " 节：" + item.sectionName + "</a>");
+                        $("#"+partId).append(newSection);
+                    });
+                }
+            }
+        });
+    }
+    function showCourseDetails() {
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "showCourseDetails",
+                "courseId": courseId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    var newCourse = $("<p>课程名称：" + response.details.courseName + "</p>");
+                    var newTeacher = $("<p>课程老师:<a href='http://localhost:8080/ExamDemo_war_exploded/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a></p>");
+                    var newStartTime = $("<p>开始日期：" + response.details.startDate + "</p>");
+                    var newEndTime = $("<p>结束日期：" + response.details.endDate + "</p>");
+                    var newStudentNum = $("<p>学生人数：" + response.details.student + "</p>");
+                    var maxStudent = $("<p>最大人数：" + response.details.maxStudent + "</p>");
+                    var newIntroudction = $("<p>课程介绍：" + response.details.introduction + "</p>");
+                    $("body").append(newCourse, newTeacher, newBr, newStartTime, newEndTime, newBr, newStudentNum, maxStudent, newBr, newIntroudction, newHr);
+                }
+            }
+        });
+    };
+    function showCoursePart(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "showCoursePart",
+                "courseId": courseId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    response.details.sort(function(a, b){
+                        return a.Psort - b.Psort;
+                    });
+                    $.each(response.details, function (index, item) {
+                        var newPart = $("<div id='" + item.id.toString() + "'><p>第 " + item.Psort + " 章：" + item.partName + "</p></div>");
+                        if(item.hasExercises){
+                            var newExercises = $("<a href='http://localhost:8080/ExamDemo_war_exploded/exercise.html?partId=" + item.id + "'>本章练习</a>");
+                            newPart.append(newExercises);
+                        }
+                        $("body").append(newPart, newBr);
+                        showPartSection(item.id.toString());
+                    });
+                }
+            }
+        });
+    }
+    $(document).ready(function(){
+        showCourseDetails();
+        showCoursePart();
+    });
+</script>
+</html>

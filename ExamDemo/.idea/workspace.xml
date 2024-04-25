@@ -10,13 +10,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4156667a-4c3f-447f-8ba3-59491b4f019c" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/AuthenticateDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/AuthenticateService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/AuthenticateServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/allCourse.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/authentication.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/courseDetails.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/exercise.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/exerciseHistory.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/forgetPassword.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/myCourse.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/myself.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/section.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/signup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/userDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/109c73ef-8efe-4d83-a112-684129c63de9.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/109c73ef-8efe-4d83-a112-684129c63de9.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseAndUserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseAndUserDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/PartDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/PartDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/ExerciseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/ExerciseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/PartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/PartServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/SectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/SectionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/User_ExerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/User_ExerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter0_Encoding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter0_Encoding.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/BaseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/BaseServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User_Exer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User_Exer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/DAO_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/DAO_Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JSON_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JSON_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/VerifyCodeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/VerifyCodeServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Part.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Part.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../文档/进度文档.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../文档/进度文档.docx" afterDir="false" />
     </list>
@@ -30,6 +60,7 @@
       <list>
         <option value="Interface" />
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -66,6 +97,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;Tomcat 服务器.Tomcat 9.0.87.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
@@ -170,6 +202,14 @@
       <workItem from="1713847751376" duration="14277000" />
       <workItem from="1713865139994" duration="1703000" />
       <workItem from="1713875968794" duration="9000" />
+      <workItem from="1713876068042" duration="5662000" />
+      <workItem from="1713882214596" duration="12243000" />
+      <workItem from="1713927840224" duration="8166000" />
+      <workItem from="1713939178726" duration="5547000" />
+      <workItem from="1713954439944" duration="330000" />
+      <workItem from="1713954882484" duration="7374000" />
+      <workItem from="1713966677173" duration="8799000" />
+      <workItem from="1714007286947" duration="12083000" />
     </task>
     <servers />
   </component>

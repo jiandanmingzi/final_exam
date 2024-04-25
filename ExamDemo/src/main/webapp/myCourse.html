@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的课程<</title>
+</head>
+<body>
+    <p>学生展示自己学习的课程，老师展示自己创建的课程</p>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var newHr = $("<hr>");
+        var newBr = $("<br>");
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+            type:'POST',
+            dataType:'json',
+            contentType: 'application/json',
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "showMyCourse"
+            }),
+            success:function(response){
+                if(response.message === "success"){
+                    $.each(response.details, function(index, item){
+                        var newCourse = $("<a href='http://localhost:8080/ExamDemo_war_exploded/course/courseDetail.html?courseId=" + item.courseId + "'>" + item.courseName + "</a>");
+                        var newTeacher = $("<a href='http://localhost:8080/ExamDemo_war_exploded/user/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a>");
+                        var newStartTime = $("<p>开始日期：" + item.startDate + "</p>");
+                        var newEndTime = $("<p>结束日期：" + item.endDate + "</p>");
+                        $("body").append(newHr, newCourse, newBr, newTeacher, newStartTime, newEndTime);
+                    });
+                }
+            }
+        });
+    });
+</script>
+</html>

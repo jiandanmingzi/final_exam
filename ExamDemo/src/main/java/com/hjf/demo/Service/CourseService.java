@@ -18,4 +18,5 @@ public interface CourseService {
      boolean setCourseUnready(int id, boolean ready) throws SQLException, InterruptedException;
     boolean checkName(String name) throws SQLException, InterruptedException;
     boolean addStudentToCourse(int id, Course course) throws InterruptedException, SQLException;
+    List<Course> showStudentCourse(int id) throws SQLException, InterruptedException;
 }

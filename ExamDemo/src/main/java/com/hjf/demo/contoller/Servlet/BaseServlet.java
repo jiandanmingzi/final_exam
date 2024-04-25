@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class BaseServlet extends HttpServlet {
@@ -18,14 +20,17 @@ public class BaseServlet extends HttpServlet {
     private void invokeMethod(HttpServletRequest req, HttpServletResponse resp, String methodName) throws IOException {
         Class<? extends BaseServlet> actionClass = this.getClass();
         Method method;
+        System.out.println("methodName = " + methodName);
         try {
             method = actionClass.getMethod(methodName,HttpServletRequest.class, HttpServletResponse.class);
             method.invoke(this,req, resp);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            if (e.getClass() == NoSuchMethodException.class)
-                LOGGER.severe("Method not found:" + e.getMessage());
-            else
-                LOGGER.severe("Error invoking method:" + e.getMessage());
+        } catch (NoSuchMethodException e) {
+            LOGGER.severe("NoSuchMethodException: " + e.getMessage());
+            SetResponse_Utils.setResponse(resp ,500, "Error", e.getMessage());
+        } catch (InvocationTargetException e) {
+            LOGGER.severe("InvocationTargetException: " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            LOGGER.severe("IllegalAccessException: " + e.getMessage());
             SetResponse_Utils.setResponse(resp ,500, "Error", e.getMessage());
         }
     }

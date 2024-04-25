@@ -6,6 +6,15 @@ public class Part {
     private int courseId;
     private int sort;
     private String identifier;
+    private boolean hasExercises;
+
+    public boolean isHasExercises() {
+        return hasExercises;
+    }
+
+    public void setHasExercises(boolean hasExercises) {
+        this.hasExercises = hasExercises;
+    }
 
     public int getCourseId() {
         return courseId;

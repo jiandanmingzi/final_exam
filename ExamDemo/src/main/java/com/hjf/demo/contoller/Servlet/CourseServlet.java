@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("user/courseServlet")
+@WebServlet("/user/courseServlet")
 public class CourseServlet extends BaseServlet{
     private final SectionService sectionService = new SectionServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();
@@ -29,7 +29,7 @@ public class CourseServlet extends BaseServlet{
     private final ExerciseService exerciseService = new ExerciseServiceImpl();
     private final User_ExerService userExerService = new User_ExerServiceImpl();
 
-    public void getCourseCount (HttpServletRequest request, HttpServletResponse response) throws SQLException, InterruptedException, IOException {
+    public void getCourseNum (HttpServletRequest request, HttpServletResponse response) throws SQLException, InterruptedException, IOException {
         AllCourseBrief allCourseBrief = AllCourseFactory.getInstance();
         int count = allCourseBrief.CourseCount();
         SetResponse_Utils.setResponse(response, 200, "success", count);
@@ -55,8 +55,7 @@ public class CourseServlet extends BaseServlet{
         int status = 400;
         String message = "false";
         Object details = "无该课程";
-        JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
-        int id = rootNode.get("id").asInt();
+        int id = Integer.parseInt(request.getParameter("courseId"));
         Course course = courseService.getCourse(id);
         if(course != null){
             Map<String, Object> courseMap = CourseToMap(course);
@@ -80,7 +79,8 @@ public class CourseServlet extends BaseServlet{
                 Map<String, Object> partMap = new HashMap<>();
                 partMap.put("id", part.getId());
                 partMap.put("partName", part.getPartName());
-                partMap.put("sort", part.getSort());
+                partMap.put("Psort", part.getSort());
+                partMap.put("hasExercises", part.isHasExercises());
                 list.add(partMap);
             }
             status = 200;
@@ -129,7 +129,7 @@ public class CourseServlet extends BaseServlet{
             boolean admin = (boolean)claims.get("admin");
             List<Exercise> exercises = exerciseService.getExercisesBelowPart(partId.asInt());
             if (exercises != null && !exercises.isEmpty()) {
-                int courseId = exercises.getFirst().getCourseId();
+                int courseId = exercises.get(0).getCourseId();
                 Course course = courseService.getCourse(courseId);
                 if ( course != null && !course.isReady() && !admin) {
                     details = "课程尚未开放";
@@ -168,9 +168,7 @@ public class CourseServlet extends BaseServlet{
         SetResponse_Utils.setResponse(response, status, message, details);
     }
 
-    public void checkAnswer(HttpServletRequest request, HttpServletResponse response){
 
-    }
 
     public void study(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
         int status = 400;
@@ -216,12 +214,12 @@ public class CourseServlet extends BaseServlet{
         map.put("id", section.getId());
         map.put("type", section.getType());
         map.put("partId", section.getPartId());
-        map.put("sort", section.getSort());
+        map.put("Ssort", section.getSort());
         map.put("sectionName", section.getSectionName());
         return map;
     }
 
-    private static Map<String, Object> CourseToMap(Course course) {
+    public static Map<String, Object> CourseToMap(Course course) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", course.getId());
             map.put("teacherId", course.getTeacherId());
@@ -230,13 +228,15 @@ public class CourseServlet extends BaseServlet{
             map.put("startDate", course.getStartDate().toString());
             map.put("endDate", course.getEndDate().toString());
             map.put("introduction", course.getIntroduction());
+            map.put("maxStudent", course.getMaxStudent());
+            map.put("student", course.getStudent());
             return map;
     }
 
-    private static Map<String, Object> ExerciseToMap(Exercise exercise) {
+    public static Map<String, Object> ExerciseToMap(Exercise exercise) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", exercise.getId());
-        map.put("sort", exercise.getSort());
+        map.put("Esort", exercise.getSort());
         map.put("partId", exercise.getPartId());
         map.put("type", exercise.getType());
         map.put("content", exercise.getContent());
