@@ -55,8 +55,9 @@ public class CourseServiceImpl implements CourseService {
             set.add("id");
             List<Course> courses = courseDao.select("courseName",name,set);
             if (courses!= null && (!courses.isEmpty())){
-                Course course = new Course(teacherId ,name , 0, maxStudent, teacherName, introduction, startDate, endDate,ready, 0);
+                Course course = new Course(0, teacherId, 0, 0, name, maxStudent, 0, teacherName, introduction, ready, startDate, endDate);
                 course.setId(courses.get(0).getId());
+                AllCourseFactory.getInstance().addCourse(course);
                 return true;
             }
         }

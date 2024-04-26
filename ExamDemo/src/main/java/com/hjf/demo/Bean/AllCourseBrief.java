@@ -76,4 +76,8 @@ public class AllCourseBrief {
         }
         return 0;
     }
+
+    public void addCourse(Course course){
+        courses.add(course);
+    }
 }

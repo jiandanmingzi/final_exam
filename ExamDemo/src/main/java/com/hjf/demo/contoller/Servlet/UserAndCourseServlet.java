@@ -1,6 +1,7 @@
 package com.hjf.demo.contoller.Servlet;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.hjf.demo.Bean.AllCourseFactory;
 import com.hjf.demo.Dao.Impl.User_SectionDaoImpl;
 import com.hjf.demo.Dao.User_SectionDao;
 import com.hjf.demo.Service.*;
@@ -224,7 +225,7 @@ public class UserAndCourseServlet extends BaseServlet{
                 if (partService.addPart(courseId.asInt(), partName.asText(), sort.asInt())) {
                     status = 200;
                     message = "success";
-                    details = "添加成功";
+                    details = partService.getPartByIdentifier(courseId + "_" + sort).getId();
                 } else details = "添加失败，修改前数据已刷新";
             }
         }else{
@@ -274,17 +275,17 @@ public class UserAndCourseServlet extends BaseServlet{
             JsonNode sort = rootNode.get("sort");
             JsonNode sectionName = rootNode.get("sectionName");
             JsonNode type = rootNode.get("type");
-            JsonNode introduction = rootNode.get("introduction");
             JsonNode partId = rootNode.get("partId");
+            JsonNode path = rootNode.get("path");
             List<JsonNode> list = new ArrayList<>();
             list.add(courseId);
             list.add(sort);
             list.add(sectionName);
             list.add(type);
-            list.add(introduction);
             list.add(partId);
+            list.add(path);
             if (JSON_Utils.checkNode(list)) {
-                if (sectionService.addSection(sectionName.asText(), teacherId, partId.asInt(), sort.asInt(), type.asText(), introduction.asText(), courseId.asInt())) {
+                if (sectionService.addSection(sectionName.asText(), teacherId, partId.asInt(), sort.asInt(), type.asText(), courseId.asInt(), path.asText())) {
                     courseService.AddSectionToCourse(courseId.asInt());
                     status = 200;
                     message = "success";
@@ -684,14 +685,12 @@ public class UserAndCourseServlet extends BaseServlet{
             JsonNode introduction = rootNode.get("introduction");
             JsonNode courseName = rootNode.get("courseName");
             JsonNode maxStudent = rootNode.get("maxStudent");
-            JsonNode ready = rootNode.get("ready");
             List<JsonNode> jsonNodes = new ArrayList<>();
             jsonNodes.add(startTime);
             jsonNodes.add(endTime);
             jsonNodes.add(introduction);
             jsonNodes.add(courseName);
             jsonNodes.add(maxStudent);
-            jsonNodes.add(ready);
             if (!JSON_Utils.checkNode(jsonNodes)){
                 status = 400;
                 message = "false";
@@ -701,10 +700,10 @@ public class UserAndCourseServlet extends BaseServlet{
                 if (courseService.checkName(courseName.asText())) {
                     if (lock.tryLock(1, TimeUnit.SECONDS)) {
                         if (courseService.checkName(courseName.asText())) {
-                            if (courseService.creatCourse(ready.asBoolean(), courseName.asText(), maxStudent.asInt(), teacherName, introduction.asText(), LocalDateTime.parse(startTime.asText(), formatter), LocalDateTime.parse(endTime.asText(), formatter), id)) {
+                            if (courseService.creatCourse(false, courseName.asText(), maxStudent.asInt(), teacherName, introduction.asText(), LocalDateTime.parse(startTime.asText(), formatter), LocalDateTime.parse(endTime.asText(), formatter), id)) {
                                 status = 200;
                                 message = "success";
-                                details = "添加成功";
+                                details = AllCourseFactory.getInstance().getCourseIdByName(courseName.asText());
                             } else {
                                 status = 400;
                                 message = "false";

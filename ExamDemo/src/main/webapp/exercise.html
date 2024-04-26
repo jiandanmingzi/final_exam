@@ -5,12 +5,16 @@
     <title>习题</title>
 </head>
 <body>
-
+    <div id="exercise">
+    </div>
+    <button id="submit" disabled>提交</button>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var url = new URL(window.location.href);
     var partId = +url.searchParams.get("partId");
+    var exerciseIds = [];
+    var done = false;
     $(document).ready(function(){
         $.ajax({
             url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
@@ -29,20 +33,100 @@
                     response.details.sort(function(a, b){
                         return a.Esort - b.Esort;
                     });
-                    $.each(response.details, function (index, item) {
+                    done = response.details.done;
+                    $.each(response.details.exer, function (index, item) {
+                        exerciseIds.push(item.id);
+                        var newExercise;
+                        var parts;
+                        var content;
                         if(item.type === "choice"){
-                            var newExercise = $("<p>第 " + item.Esort + " 题：" + item.content + "</p>");
-                            var newChoice = $("<p>选项：</p>");
-                            $.each(item.choice, function(index, choice){
-                                newChoice.append("<p>" + choice + "</p>");
-                            });
-                            newExercise.append(newChoice);
+                            parts = item.content.split("|");
+                            content = parts[0];
+                            var A = parts[1];
+                            var B = parts[2];
+                            var C = parts[3];
+                            var D = parts[4];
+                            newExercise = $("<div id='" + item.id + "'><p>" + item.Esort + ". " + content + "</p><input type='radio' name='" + item.id + "' value='A'>" + A + "<br><input type='radio' name='" + item.id  + "' value='B'>" + B + "<br><input type='radio' name='" + item.id + "' value='C'>" + C + "<br><input type='radio' name='" + item.id + "' value='D'>" + D + "</div>");
+                            $("#exercise").append(newExercise);
+                        }else if(item.type === "fill"){
+                            parts = item.content.split("|");
+                            content = parts[0];
+                            newExercise = $("<div id='" + item.id + "'><p>" + item.Esort + ". " + content + "</p><input type='text' name='" + item.id + "_fill'></div>");
+                            $("#exercise").append(newExercise);
+                        }else if(item.type === "judge"){
+                            parts = item.content.split("|");
+                            content = parts[0];
+                            newExercise = $("<div id='" + item.id + "'><p>" + item.Esort + ". " + content + "</p><input type='radio' name='" + item.id + "_judge' value='true'>对<br><input type='radio' name='" + item.id + "_judge' value='false'>错</div>");
+                            $("#exercise").append(newExercise);
+                        }
+                        $('#'+item.id).append("<p>答案：" + item.answer + "</p>");
+                        if (done){
+                            var wrong = response.details.WrongAnswer[item.id];
+                            if (wrong !== undefined){
+                                $('#'+item.id).append("<p>回答情况：错误;你的答案:" + wrong + "</p>");
+                            }else{
+                                $('#'+item.id).append("<p>回答情况：正确</p>");
+                            }
+                        }else{
+                            $('#submit').removeAttr("disabled");
                         }
                         $("body").append(newExercise);
                     });
                 }
             }
         })
+        $('#submit').click(function(){
+            var allFilled = true;
+
+            // 遍历所有的输入框  
+            $('#exercise input').each(function () {
+                // 根据输入框的类型进行检查  
+                if ($(this).is('input[type="text"]') && $(this).val().trim() === '') {
+                    // 如果是文本框且为空，则设置标志位为false  
+                    allFilled = false;
+                    return false; // 跳出循环  
+                } else if ($(this).is('input[type="radio"]') && !$(this).is(':checked')) {
+                    // 如果是单选框且没有被选中，则检查同一组的单选框  
+                    var name = $(this).attr('name');
+                    if ($('input[type="radio"][name="' + name + '"]:checked').length === 0) {
+                        // 如果没有任何单选框被选中，则设置标志位为false  
+                        allFilled = false;
+                        return false; // 跳出循环  
+                    }
+                }
+            });  
+            if (allFilled){
+                var answers = $('#exercise input').serialize();
+                var keyValuePair = {};
+                for (var i = 0; i < answers.length; i++) {
+                    keyValuePair[exerciseIds[i]] = answers[i].value;
+                }
+                $.ajax({
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", localStorage.getItem("token"));
+                    },
+                    data: JSON.stringify(
+                    {
+                        keyValuePair,
+                        "method": "checkAnswer",
+                    }),
+                    success: function (response) {
+                        if (response.message === "success") {
+                            alert("提交成功");
+                            
+                        }else{
+                            alert("提交失败");
+                        }
+                    }
+                });
+            }else{
+                alert("请填写所有题目");
+            }
+        });
     })
 </script>
 </html>

@@ -32,9 +32,30 @@
                     if(response.details.type === "video"){
                         newContent = $("<video src='" + response.details.path + "' controls='controls'></video>");
                     }else{
-                        newContent = $("<p>" + response.details.content + "</p>");
+                        newContent = $("<p>" + response.details.path + "</p>");
                     }
                     $("body").append(newSection, newContent);
+                    $.ajax({
+                        url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        beforeSend: function (request) {
+                            request.setRequestHeader("Authorization", localStorage.getItem("token"));
+                        },
+                        data: JSON.stringify({
+                            "method": "checkIsFinished",
+                            "sectionId": sectionId,
+                        }),
+                        success:function(response){
+                            if(response.message === "success"){
+                                if (response.details === "finished")
+                                {
+                                    $("body").pappend('<p>已完成</p>');
+                                }
+                            }
+                        }
+                    })
                 }
             }
         })

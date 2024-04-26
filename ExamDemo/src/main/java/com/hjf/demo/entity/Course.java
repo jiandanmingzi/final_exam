@@ -25,17 +25,19 @@ public class Course {
 
     public Course(){}
 
-    public Course(int teacherId, String courseName, int student, int maxStudent, String teacherName, String introduction, LocalDateTime startDate, LocalDateTime endDate, boolean ready, int sectionNum) {
+    public Course(int sectionNum, int teacherId, int exerciseNum, int exercisesNum, String courseName, int maxStudent, int student, String teacherName, String introduction, boolean ready, LocalDateTime startDate, LocalDateTime endDate) {
+        this.sectionNum = sectionNum;
         this.teacherId = teacherId;
+        this.exerciseNum = exerciseNum;
+        this.exercisesNum = exercisesNum;
         this.courseName = courseName;
         this.maxStudent = maxStudent;
+        this.student = student;
         this.teacherName = teacherName;
         this.introduction = introduction;
+        this.ready = ready;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.ready = ready;
-        this.sectionNum = sectionNum;
-        this.student = student;
     }
 
     public int getExercisesNum() {

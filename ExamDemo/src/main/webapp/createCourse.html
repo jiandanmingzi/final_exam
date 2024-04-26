@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建课堂</title>
+</head>
+<body>
+    <button id="createCourse" disabled>创建课堂</button>
+    <div id="course">
+
+    </div>
+    <button id="finish" disabled>完成</button>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var courseId;
+    var partSort = 0;
+    var partId = [];
+    var sectionSort = [];
+    var exerciseSort = [];
+    function checkIsAllFilled(divId){
+         var allFilled = true;
+
+        // 遍历所有的输入框  
+        $('#'+ divId +' input').each(function () {
+            // 根据输入框的类型进行检查  
+            if ($(this).is('input[type="text"]') && $(this).val().trim() === '') {
+                // 如果是文本框且为空，则设置标志位为false  
+                allFilled = false;
+                return false; // 跳出循环  
+            } else if ($(this).is('input[type="radio"]') && !$(this).is(':checked')) {
+                // 如果是单选框且没有被选中，则检查同一组的单选框  
+                var name = $(this).attr('name');
+                if ($('input[type="radio"][name="' + name + '"]:checked').length === 0) {
+                    // 如果没有任何单选框被选中，则设置标志位为false  
+                    allFilled = false;
+                    return false; // 跳出循环  
+                }
+            }
+        });  
+        return allFilled;
+    }
+    function clickSubmitPart(button){
+        let buttonId = button.id;
+        let partSort = parseInt(buttonId.split('_')[1]);
+        let inputId = "part_sort_" + partSort;
+        let partName = $("#" + inputId).val().trim();
+        if(checkIsAllFilled("part_" + partSort)){
+            $.ajax({
+                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "method": "showPart",
+                    "courseId": courseId,
+                    "sort": partSort,
+                    "partName": partName
+                }),
+                success: function (response) {
+                    if (response.message === "success") {
+                        button.attr("disabled", "disabled");
+                        $("#createSection_" + partSort).removeAttr("disabled");
+                        $('#addExercise_' + partSort).removeAttr("disabled");
+                        $("#part_sort_" + partSort).attr("disabled", "disabled");
+                        sectionSort[partSort] = 0;
+                        exerciseSort[partSort] = 0;
+                        partId[partSort] = response.details;
+                    }
+                }
+            })
+        }else{
+            alert("请填写完整");
+        }
+    }
+    function clickCreateSection(button){
+        let buttonId = button.id;
+        let partSort = parseInt(buttonId.split('_')[1]);
+        sectionSort[partSort]++;
+        let newSection = $("<div id='section_" + partSort + "_" + sectionSort[partSort] + "'><input type='text' id='sectionName_" + partSort + "_" + sectionSort[partSort] + "' placeholder='小节名称'><br><textarea placeholder='小节内容' id='sectionContent_"+ partSort + "_" + sectionSort[partSort]  +"' required rows='4' cols='30'>小节内容</textarea><button id='submitSection_" + partSort + "_" + sectionSort[partSort] + "' onclick='clickSubmitSection(this)'>创建</button><br><div id='sectionExercise_" + partSort + "_" + sectionSort[partSort] + "'></div></div>");
+        $('#partSection_' + partSort).append(newSection);
+    }
+    function clickAddExercise(button){
+        let buttonId = button.id;
+        let partSort = parseInt(buttonId.split('_')[1]);
+        exerciseSort[partSort]++;
+        let newExercise = $("<div id='exercise_" + partSort + "_" + exerciseSort[partSort] + "'><seletc id='exerciseType_" + partSort + "_" + exerciseSort[partSort] + "'><option value='choice'>选择</option><option value='fill'>填空</option><option value='judge'>判断</option></select><input type='text' id='exerciseContent_" + partSort + "_" + exerciseSort[partSort] + "' placeholder='题目（选择题则题目和选项间用|隔开（一定要有4个|））'><input type='text' placeholder='答案（选择题则为ABCD中一个，判断题则为true或者false）' id='exerciseAnswer_" + partSort + "_" + exerciseSort[partSort] + "'><button id='submitExercise_" + partSort + "_" + exerciseSort[partSort] + "' onclick='clickSubmitExercise(this)'>创建</button></div>");
+        $('#partExercise_' + partSort).append(newExercise);
+    }
+    function clickSubmitSection(button){
+        let buttonId = button.id;
+        let partSort = parseInt(buttonId.split('_')[1]);
+        let sectionSort = parseInt(buttonId.split('_')[2]);
+        var contentId = "sectionContent_" + partSort + "_" + sectionSort;
+        var nameId = "sectionName_" + partSort + "_" + sectionSort;
+        var content = $("#" + contentId).val().trim();
+        var name = $("#" + nameId).val().trim();
+        if (content !== "" && name !== ""){
+            $.ajax({
+                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "method": "addSection",
+                    "partId": partId[partSort],
+                    "sort": sectionSort,
+                    "path": content,
+                    "name": name,
+                    "type": "text",
+                    "courseId": courseId
+                }),
+                success: function (response) {
+                    if (response.message === "success") {
+                        button.attr("disabled", "disabled");
+                        $(nameId).attr("disabled", "disabled");
+                        $(contentId).attr("disabled", "disabled");
+                    }
+                }
+            })
+        }else{
+            alert("请填写完整");
+        }
+    }
+    function clickSubmitExercise(button){
+        let buttonId = button.id;
+        let partSort = parseInt(buttonId.split('_')[1]);
+        let exerciseSort = parseInt(buttonId.split('_')[2]);
+        var type = $("#exerciseType_" + partSort + "_" + exerciseSort).val().trim();
+        var content = $("#exerciseContent_" + partSort + "_" + exerciseSort).val().trim();
+        var answer = $("#exerciseAnswer_" + partSort + "_" + exerciseSort).val().trim();
+        var regex = /^[^\s]+\|(?:[^\s]+\|){3}[^\s]+$/;
+        if( (type === 'choice' && (answer === 'A' || answer === 'B' || answer ==='C' || answer ==='D') &&  regex.test(content)) || (type ==='fill') || (type === 'judge' && (answer === 'true' || answer === 'false' ))){
+            if (content !== "" && answer !== ""){
+                $.ajax({
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "method": "addExercise",
+                        "partId": partId[partSort],
+                        "sort": exerciseSort,
+                        "content": content,
+                        "answer": answer,
+                        "type": type,
+                        "courseId": courseId
+                    }),
+                    success: function (response) {
+                        if (response.message === "success") {
+                            button.attr("disabled", "disabled");
+                            $("#exerciseContent_" + partSort + "_" + exerciseSort).attr("disabled", "disabled");
+                            $("#exerciseAnswer_" + partSort + "_" + exerciseSort).attr("disabled", "disabled");
+                            $("#exerciseType_" + partSort + "_" + exerciseSort).attr("disabled", "disabled");
+                        }
+                    }
+                })
+            }else{
+                alert("请填写完整");
+            }
+        }else{
+            alert("请正确填写");
+        }
+    }
+    $(document).ready(function(){
+        $.ajax({
+            url:"http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet",
+            type:"post",
+            data:JSON.stringify({
+                "method":"checkTeacher"
+            }),
+            dataType: 'json',
+            contentType: 'application/json',
+            success:function(response){
+                if(response.details === "is"){
+                    $('#createCourse').removeAttr("disabled");
+                }else{
+                    alert("您不是教师，无法创建课堂");
+                }
+            }
+        });
+        $('#createCourse').click(function(){
+            var newCourse = $("<div id='thisCourse'><input type='text' id='courseName' placeholder='课堂名称(不可重复)'><button id='submitCourse'>上传</button><button id='cancelCourse'>取消</button><button id='createPart' disabled>添加章节</button><br><input type='number' id='maxStudent' placeholder='最大人数'><label for='startTime'>开始日期</label><input type='date' id='startTime'><br><label for='endTime'>截止日期</label><input type='date' id='endTime'><br><textarea placeholder='课程介绍' id='introduction' required rows='4' cols='30'>课程介绍</textarea></div>");
+            $('#course').append(newCourse);
+            $('#createCourse').attr("disabled", "disabled");
+        });
+        $('#course').on('click', '#submitCourse', function(){
+            var courseName = $('#courseName').val().trim();
+            var maxStudent = $('#maxStudent').val().trim();
+            var startTime = $('#startTime').val().trim();
+            var endTime = $('#endTime').val().trim();
+            var introduction = $('#introduction').val().trim();
+            if(courseName !== "" && maxStudent !== "" && startTime !== "" && endTime !== "" && introduction !== ""){
+                $.ajax({
+                    url:"http://localhost:8080/ExamDemo_war_exploded/user/courseServlet",
+                    type:"post",
+                    data:JSON.stringify({
+                        "method":"addCourse",
+                        "courseName":courseName,
+                        "maxStudent":maxStudent,
+                        "startTime":startTime,
+                        "endTime":endTime,
+                        "introduction":introduction
+                    }),
+                    success:function(response){
+                        if(response.message === "success"){
+                            $('#cancelCourse').attr("disabled", "disabled");
+                            $('#submitCourse').attr("disabled", "disabled");
+                            $('#finish').removeAttr("disabled");
+                            $('#createPart').removeAttr("disabled");
+                            $('#courseName').attr("disabled", "disabled");
+                            $('#maxStudent').attr("disabled", "disabled");
+                            $('#startTime').attr("disabled", "disabled");
+                            $('#endTime').attr("disabled", "disabled");
+                            $('#introduction').attr("disabled", "disabled");
+                            courseId = response.details;
+                        }
+                    }
+                });
+            }else{
+                alert("请填写完整");
+            }
+        });
+        $('#course').on('click', '#cancelCourse', function(){
+            $('#thisCourse').remove();
+            $('#createCourse').removeAttr("disabled");
+        });
+        $('#course').on('click', '#createPart', function(){
+            partSort++;
+            var newPart = $("<div id='part_" + partSort + "'><input type='text' id='part_sort_" + partSort + "' placeholder='章节名称'><button id='submitPart_" + partSort + "' onclick='clickSubmitPart(this)'>创建</button><button id='createSection_" + partSort + "' disabled onclick='clickCreateSection(this)>添加小节</button><button id='addExercise_" + partSort + "' disabled onclick='clickAddExercise(this)'>添加习题</button><br><div id='partSection_"+ partSort +"'></div><br><div id='partExercise_"+partSort+"'></div></div>");
+            $('#thisCourse').append(newPart);
+        });
+    });
+</script>
+</html>

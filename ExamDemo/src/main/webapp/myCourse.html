@@ -49,7 +49,7 @@
                 if(response.message === "success"){
                     $.each(response.details, function(index, item){
                         var newCourse = $("<a href='http://localhost:8080/ExamDemo_war_exploded/course/courseDetail.html?courseId=" + item.courseId + "'>" + item.courseName + "</a>");
-                        var newTeacher = $("<a href='http://localhost:8080/ExamDemo_war_exploded/user/createCourse.html >" + 添加课程 + "</a>");
+                        var newTeacher = $("<a href='http://localhost:8080/ExamDemo_war_exploded/createCourse.html' >" + 添加课程 + "</a>");
                         var newStartTime = $("<p>开始日期：" + item.startDate + "</p>");
                         var newEndTime = $("<p>结束日期：" + item.endDate + "</p>");
                         $("body").append(newHr, newCourse, newBr, newTeacher, newStartTime, newEndTime);

@@ -52,12 +52,14 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public boolean addPart(int courseId, String partName, int sort) throws SQLException, InterruptedException {
-        String identifier = courseId + "-" + sort;
+        String identifier = courseId + "_" + sort;
         if (getPartByIdentifier(identifier) == null){
             Map<String, Object> map = new HashMap<>();
             map.put("courseId", courseId);
             map.put("sort", sort);
             map.put("partName", partName);
+            map.put("hasExercises", false);
+            map.put("identifier", identifier);
             return partDao.add(map);
         }
         return false;

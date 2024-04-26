@@ -23,7 +23,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public boolean addSection(String sectionName, int teacherId, int partId, int sort, String type, String introduction, int courseId) throws SQLException, InterruptedException {
+    public boolean addSection(String sectionName, int teacherId, int partId, int sort, String type, int courseId, String path) throws SQLException, InterruptedException {
         Map<String, Object> map = new HashMap<>();
         map.put("sectionName", sectionName);
         map.put("teacherId", teacherId);
@@ -31,8 +31,7 @@ public class SectionServiceImpl implements SectionService {
         map.put("partId", partId);
         map.put("sort", sort);
         map.put("type", type);
-        map.put("introduction", introduction);
-        map.put("path", "null");
+        map.put("path", path);
         return sectionDao.add(map);
     }
 

@@ -155,6 +155,8 @@ public class CourseServlet extends BaseServlet{
                             Map<String, Object> map = ExerciseToMap(exercise);
                             if (admin || done) {
                                 map.put("answer", exercise.getAnswer());
+                            }else{
+                                map.put("answer", "");
                             }
                             maps.add(map);
                         }
@@ -200,6 +202,9 @@ public class CourseServlet extends BaseServlet{
                         map.put("path", section.getPath());
                         map.put("introduction", section.getIntroduction());
                         map.put("courseId", section.getCourseId());
+                        if (section.getType().equals("text")){
+
+                        }
                         status = 200;
                         message = "success";
                         details = map;
