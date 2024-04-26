@@ -41,21 +41,30 @@ public class UserServlet extends BaseServlet{
         }
     }
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException, NoSuchAlgorithmException {
+        int status = 200;
+        String message = "false";
+        Object details = "用户名或密码错误";
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         String account = rootNode.get("account").asText();
         String password = Encrypt_Utils.encrypt(rootNode.get("password").asText());
         User user = userService.login(account, password);
+        System.out.println(22);
         if (user == null) {
-            SetResponse_Utils.setResponse(response ,200, "false", "账号或密码错误");
+            System.out.println(44);
         }else{
+            System.out.println(33);
             Map<String , Object> map = new TreeMap<>();
-            map.put("id", user.getId());
-            map.put("admin", user.isAdmin());
-            map.put("authenticated", user.isAuthenticated());
-            String token = JWT_Utils.getToken(map);
-            SetResponse_Utils.setResponse(response ,300, "success", token);
-            response.sendRedirect("/home.html");
+            map.put("id", String.valueOf(user.getId()));
+            System.out.println(user.getId());
+            map.put("admin", String.valueOf(user.isAdmin()));
+            System.out.println(user.isAdmin());
+            map.put("authenticated", String.valueOf(user.isAuthenticated()));
+            System.out.println(user.isAuthenticated());
+            details = JWT_Utils.getToken(map);
+            message = "success";
+            status = 200;
         }
+        SetResponse_Utils.setResponse(response ,status, message, details);
     }
 
     public void authentication(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException, NoSuchAlgorithmException {
@@ -71,7 +80,9 @@ public class UserServlet extends BaseServlet{
         nodeList.add(realName);
         nodeList.add(introduction);
         if(JSON_Utils.checkNode(nodeList)){
-            int userId = (int)JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("id");
+            System.out.println(22);
+            int userId = Integer.parseInt((String) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("id"));
+            System.out.println(userId);
             User user = userService.showUserInfo(userId);
             if (!user.isAuthenticated()) {
                 Map<String , Object> info = new TreeMap<>();
@@ -130,38 +141,30 @@ public class UserServlet extends BaseServlet{
     }
 
     public void signup(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException, NoSuchAlgorithmException {
-        int status;
-        String message;
-        Object details;
+        int status = 200;
+        String message = "false";
+        Object details = "注册失败";
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         String account = rootNode.get("account").asText();
         String password = Encrypt_Utils.encrypt(rootNode.get("password").asText());
         String username = rootNode.get("username").asText();
         String email = rootNode.get("email").asText()+"@qq.com";
-        if (userService.checkData("account", account) != 0) {
-            if (lock.tryLock(1, TimeUnit.SECONDS)) {
-                if (userService.checkData("account", account) != 0) {
+        if (userService.checkData("account", account) == 0) {
+                if (userService.checkData("account", account) == 0) {
                     if (userService.signup(account, username, password, email, false)) {
+                        System.out.println(101);
                         status = 200;
                         message = "success";
                         details = "注册成功";
-                        response.sendRedirect("/login.html");
                     } else {
                         status = 500;
                         message = "false";
-                        details = "注册失败";
                     }
                 }else {
                     status = 200;
                     message = "false";
                     details = "账号已存在";
                 }
-                lock.unlock();
-            }else {
-                status = 200;
-                message = "false";
-                details = "服务器繁忙";
-            }
         }else {
             status = 200;
             message = "false";
@@ -182,11 +185,11 @@ public class UserServlet extends BaseServlet{
 
     public void checkEmail(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
-        String email = rootNode.get("email").asText();
+        String email = rootNode.get("email").asText()+"@qq.com";
         if (userService.checkData("email",email) != 0){
             SetResponse_Utils.setResponse(response ,200, "false", "邮箱已存在");
         }else {
-            SetResponse_Utils.setResponse(response ,200, "success", "邮箱已存在");
+            SetResponse_Utils.setResponse(response ,200, "success", "邮箱不存在");
         }
     }
 }

@@ -12,7 +12,7 @@ public class User_SectionDaoImpl implements User_SectionDao {
     private final String table = "user_section";
     @Override
     public List<Map<String, Object>> getUserSchedule(int studentId, int courseId) throws SQLException, InterruptedException {
-        String sql = "select finished, schedule from user_section where student_id=? and course_id=?";
+        String sql = "select finished, schedule from user_section where userId=? and courseId=?";
         return CRUD_Utils.query(sql, rs -> {
             List<Map<String, Object>> dataList = new ArrayList<>();
             while (rs.next()) {

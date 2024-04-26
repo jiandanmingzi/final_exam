@@ -11,7 +11,7 @@
 </head>
 <body>
 <p>sbedge</p>
-    <form>
+    <div>
         <label for="userAccount">账号:</label>
         <br>
         <input placeholder="请输入账号" type="text" id="userAccount" required>
@@ -33,10 +33,13 @@
         <button id="registerBtn">注册</button>
         <button id="forgotPwdBtn">忘记密码</button>
         <div id="message" class="error"></div>
-    </form>
+    </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function error(){
+        window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/myself.html';
+    }
     $(document).ready(function() {
 
         $('#userAccount, #passWord, #verifyCode').on('input', function() {
@@ -65,6 +68,7 @@
                 $.ajax({
                     url: "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet",
                     type: 'POST',
+                    async:false,
                     dataType: 'json',
                     contentType: 'application/json',
                     data:JSON.stringify({
@@ -76,6 +80,7 @@
                             $.ajax({
                                 url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
                                 type: 'POST',
+                                async: false,
                                 dataType: 'json',
                                 contentType: 'application/json',
                                 data: JSON.stringify({
@@ -85,22 +90,43 @@
                                 }),
                                 success: function (response) {
                                     if (response.message === "success") {
-                                        sessionStorage.setItem('token', response.details);
-                                        window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/home.html';
+                                        alert("登陆成功");
+                                        console.log(123);
+                                        alert(response.details);
+                                        sessionStorage.setItem('token', 'Bearer ' + response.details);
+                                        window.event.returnValue = false;
+                                        window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/myself.html';
+                                        window.event.returnValue = false;
                                     } else {
+                                        console.log(456);
                                         $('#message').text(response.details).show();
                                     }
                                 },
-                                error: function () {
-                                    $('#message').text('请求失败，请检查您的网络连接。').show();
+                                error: function (jqXHR,response) {
+                                    console.log(789);
+                                    var statusCode = jqXHR.status;
+                                    switch (statusCode) {
+                                        case 300:
+                                            
+                                            alert(response.details);
+                                            sessionStorage.setItem('token', response.details);
+                                            window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/myself.html';
+                                            break;
+                                    }
+                                    
                                 }
                             })
                         }else {
                             $('#message').text(response.details).show();
                         }
                     },
-                    error: function() {
-                        $('#message').text('请求失败，请检查您的网络连接。').show();
+                    error: function(jqXHR) {
+                        var statusCode = jqXHR.status;
+                        switch (statusCode) {
+                            case 400 :
+                                alert("验证码错误");
+                                break;
+                        }
                     }
                 })
             } else {

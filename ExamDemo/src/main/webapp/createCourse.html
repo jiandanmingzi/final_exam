@@ -47,10 +47,16 @@
         let partName = $("#" + inputId).val().trim();
         if(checkIsAllFilled("part_" + partSort)){
             $.ajax({
-                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                 type: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
+                beforeSend: function (xhr) {
+                    var token = sessionStorage.getItem('token');
+                    if (token) {
+                        xhr.setRequestHeader('Authorization',  token);
+                    }
+                },
                 data: JSON.stringify({
                     "method": "showPart",
                     "courseId": courseId,
@@ -97,10 +103,16 @@
         var name = $("#" + nameId).val().trim();
         if (content !== "" && name !== ""){
             $.ajax({
-                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                 type: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
+                beforeSend: function (xhr) {
+                    var token = sessionStorage.getItem('token');
+                    if (token) {
+                        xhr.setRequestHeader('Authorization',  token);
+                    }
+                },
                 data: JSON.stringify({
                     "method": "addSection",
                     "partId": partId[partSort],
@@ -133,10 +145,16 @@
         if( (type === 'choice' && (answer === 'A' || answer === 'B' || answer ==='C' || answer ==='D') &&  regex.test(content)) || (type ==='fill') || (type === 'judge' && (answer === 'true' || answer === 'false' ))){
             if (content !== "" && answer !== ""){
                 $.ajax({
-                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        var token = sessionStorage.getItem('token');
+                        if (token) {
+                            xhr.setRequestHeader('Authorization',  token);
+                        }
+                    },
                     data: JSON.stringify({
                         "method": "addExercise",
                         "partId": partId[partSort],
@@ -164,8 +182,16 @@
     }
     $(document).ready(function(){
         $.ajax({
-            url:"http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet",
+            url:"http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet",
             type:"post",
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization', token);
+                }
+            },
             data:JSON.stringify({
                 "method":"checkTeacher"
             }),
@@ -192,8 +218,16 @@
             var introduction = $('#introduction').val().trim();
             if(courseName !== "" && maxStudent !== "" && startTime !== "" && endTime !== "" && introduction !== ""){
                 $.ajax({
-                    url:"http://localhost:8080/ExamDemo_war_exploded/user/courseServlet",
+                    url:"http://localhost:8080/ExamDemo_war_exploded/courseServlet",
                     type:"post",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        var token = sessionStorage.getItem('token');
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', token);
+                        }
+                    },
                     data:JSON.stringify({
                         "method":"addCourse",
                         "courseName":courseName,

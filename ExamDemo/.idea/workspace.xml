@@ -10,22 +10,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4156667a-4c3f-447f-8ba3-59491b4f019c" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/createCourse.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/109c73ef-8efe-4d83-a112-684129c63de9.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/109c73ef-8efe-4d83-a112-684129c63de9.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Bean/AllCourseBrief.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Bean/AllCourseBrief.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/PartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/PartServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/SectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/SectionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/SectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/SectionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/AuthenticateDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/AuthenticateDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_CourseDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_CourseDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_SectionDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_SectionDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/AuthenticateServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/AuthenticateServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter1_CheckUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter1_CheckUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/VerifyCodeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/VerifyCodeServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/CRUD_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/CRUD_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/DAO_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/DAO_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JSON_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JSON_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JWT_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/JWT_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/allCourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/allCourse.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/authentication.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/authentication.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/courseDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/courseDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/createCourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/createCourse.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/exercise.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/exercise.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/exerciseHistory.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/exerciseHistory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/forgetPassword.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/myCourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/myCourse.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/myself.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/myself.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/section.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/section.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/studentSchedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/studentSchedule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/userDetails.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../文档/进度文档.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../文档/进度文档.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../文档/mysql语句.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../文档/mysql语句.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +229,10 @@
       <workItem from="1714084275208" duration="6914000" />
       <workItem from="1714094434425" duration="1963000" />
       <workItem from="1714098424734" duration="3898000" />
-      <workItem from="1714106538629" duration="9241000" />
+      <workItem from="1714106538629" duration="20025000" />
+      <workItem from="1714131413751" duration="4876000" />
+      <workItem from="1714136306737" duration="3807000" />
+      <workItem from="1714140134723" duration="6697000" />
     </task>
     <servers />
   </component>

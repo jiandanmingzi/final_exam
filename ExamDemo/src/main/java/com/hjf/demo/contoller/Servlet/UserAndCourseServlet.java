@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-@WebServlet("/user/userAndCourseServlet")
+@WebServlet("/userAndCourseServlet")
 public class UserAndCourseServlet extends BaseServlet{
     private final ReentrantLock lock = new ReentrantLock();
     private final UserService userService = new UserServiceImpl();
@@ -36,9 +36,12 @@ public class UserAndCourseServlet extends BaseServlet{
     private final User_SectionDao userSectionDao = new User_SectionDaoImpl();
     public void showMyInfo(HttpServletRequest request, HttpServletResponse response) throws SQLException, InterruptedException, IOException {
         String authHeader = request.getHeader("Authorization");
-        int id = (int) JWT_Utils.getClaims(authHeader.substring(7)).get("id");
+        int id = Integer.parseInt((String) JWT_Utils.getClaims(authHeader.substring(7)).get("id"));
+        System.out.println(id);
         User user = userService.showUserInfo(id);
+        System.out.println(123);
         if (user != null) {
+            System.out.println(123);
             Map<String, Object> params = new HashMap<>();
             params.put("username", user.getUsername());
             params.put("qq",user.getQq());
@@ -47,11 +50,12 @@ public class UserAndCourseServlet extends BaseServlet{
             params.put("id",user.getAccount());
             params.put("admin",user.isAdmin());
             params.put("account", user.getAccount());
+            System.out.println(123);
             params.putAll(authenticateService.getInfo(id, user.isAdmin()));
+            System.out.println(123);
             SetResponse_Utils.setResponse(response,200,"success",params);
         }else {
             SetResponse_Utils.setResponse(response,500,"false","服务器异常");
-            response.sendRedirect("/login.html");
         }
     }
 
@@ -59,7 +63,8 @@ public class UserAndCourseServlet extends BaseServlet{
         int status = 200;
         String message = "false";
         Object details = "修改失败";
-        int id = (int) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("id");
+        String authHeader = request.getHeader("Authorization");
+        int id = Integer.parseInt((String) JWT_Utils.getClaims(authHeader.substring(7)).get("id"));
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         JsonNode email = rootNode.get("newEmail");
         JsonNode qq = rootNode.get("newQQ");
@@ -85,14 +90,15 @@ public class UserAndCourseServlet extends BaseServlet{
         int status = 200;
         String message = "false";
         Object details = "修改失败";
-        int id = (int) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("id");
-        boolean admin = (boolean) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("admin");
+        String authHeader = request.getHeader("Authorization");
+        int id = Integer.parseInt((String) JWT_Utils.getClaims(authHeader.substring(7)).get("id"));
+        String admin = (String) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("admin");
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         JsonNode realName = rootNode.get("newRealName");
         List<JsonNode> list = new ArrayList<>();
         list.add(realName);
         Map<String, Object> info = new HashMap<>();
-        if (admin){
+        if (admin.equals("true")){
             JsonNode teach = rootNode.get("newTeach");
             list.add(teach);
             if (JSON_Utils.checkNode(list)){
@@ -124,7 +130,7 @@ public class UserAndCourseServlet extends BaseServlet{
             }
         }
         if (!info.isEmpty()){
-            if (authenticateService.changeInfo(id, admin, info)){
+            if (authenticateService.changeInfo(id, admin.equals("true"), info)){
                 message = "success";
                 details = "修改成功";
             }
@@ -136,10 +142,11 @@ public class UserAndCourseServlet extends BaseServlet{
         int status = 200;
         String message = "false";
         Object details = "查询失败";
-        int id = (int) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("id");
-        boolean admin = (boolean) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("admin");
+        String authHeader = request.getHeader("Authorization");
+        int id = Integer.parseInt((String) JWT_Utils.getClaims(authHeader.substring(7)).get("id"));
+        String admin = (String) JWT_Utils.getClaims(request.getHeader("Authorization").substring(7)).get("admin");
         List<Map<String, Object>> maps = new ArrayList<>();
-        if (admin){
+        if (admin.equals("true")){
             List<Course> list = courseService.showTeacherCourse(id);
             for(Course course : list){
                 maps.add(CourseServlet.CourseToMap(course));
@@ -161,8 +168,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "修改失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (!admin){
+        String admin = (String)claims.get("admin");
+        if (!admin.equals("true")){
             details = "权限不足";
         }else {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
@@ -186,8 +193,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "删除失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (!admin){
+        String admin = (String)claims.get("admin");
+        if (!admin.equals("true")){
             details = "权限不足";
         }else {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
@@ -211,8 +218,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "数据不完整";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin) {
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")) {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode courseId = rootNode.get("courseId");
             JsonNode sort = rootNode.get("sort");
@@ -240,8 +247,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "修改失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")){
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode id = rootNode.get("id");
             JsonNode partName = rootNode.get("partName");
@@ -267,9 +274,9 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "数据不完整";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
+        String admin = (String)claims.get("admin");
         int teacherId = Integer.parseInt(claims.get("id").toString());
-        if (admin) {
+        if (admin.equals("true")) {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode courseId = rootNode.get("courseId");
             JsonNode sort = rootNode.get("sort");
@@ -304,8 +311,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "数据不完整";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin) {
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")) {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode sectionId = rootNode.get("sectionId");
             JsonNode courseId = rootNode.get("courseId");
@@ -332,8 +339,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "修改失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String) claims.get("admin");
+        if (admin.equals("true")){
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode sectionId = rootNode.get("sectionId");
             JsonNode dataType = rootNode.get("dataType");
@@ -363,8 +370,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "查询失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if(!admin){
+        String admin = (String)claims.get("admin");
+        if(!admin.equals("true")){
             int userId = Integer.parseInt(claims.get("id").toString());
             details = userExerService.getUser_ExerByUser(userId);
             message = "success";
@@ -378,8 +385,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "添加失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin) {
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")) {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode partId = rootNode.get("partId");
             JsonNode type = rootNode.get("type");
@@ -421,8 +428,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "删除失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")){
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode exerciseId = rootNode.get("exerciseId");
             JsonNode courseId = rootNode.get("courseId");
@@ -449,8 +456,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "修改失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String) claims.get("admin");
+        if (admin.equals("true")){
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode exerciseId = rootNode.get("exerciseId");
             JsonNode data = rootNode.get("data");
@@ -482,9 +489,9 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "检查失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
+        String admin = (String)claims.get("admin");
         int id = Integer.parseInt(claims.get("id").toString());;
-        if (admin){
+        if (admin.equals("true")){
             details = "老师不能做题";
         }else {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
@@ -512,8 +519,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "isnot";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")){
             details = "is";
         }
         SetResponse_Utils.setResponse(response, status, message, details);
@@ -525,8 +532,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "不是该课程的老师";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")){
             int id = Integer.parseInt(claims.get("id").toString());;
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode courseId = rootNode.get("courseId");
@@ -555,13 +562,13 @@ public class UserAndCourseServlet extends BaseServlet{
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
         int id = Integer.parseInt(claims.get("id").toString());
-        boolean admin = (boolean)claims.get("admin");
+        String admin = (String)claims.get("admin");
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         JsonNode courseId = rootNode.get("courseId");
         List<JsonNode> list = new ArrayList<>();
         list.add(courseId);
         if (JSON_Utils.checkNode(list)) {
-            if (!admin){
+            if (!admin.equals("true")){
                 if (!courseService.checkUserAndCourse(id, courseId.asInt())) {
                     status = 200;
                     message = "success";
@@ -587,9 +594,9 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "数据不完善";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
+        String admin = (String) claims.get("admin");
         int id = Integer.parseInt(claims.get("id").toString());;
-        if (admin){
+        if (admin.equals("true")){
             details = "老师没有学习记录";
         }else {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
@@ -614,8 +621,8 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
-        if (admin){
+        String admin = (String)claims.get("admin");
+        if (admin.equals("true")){
             message = "success";
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode courseId = rootNode.get("courseId");
@@ -636,9 +643,9 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "查询失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
+        String admin = (String) claims.get("admin");
         int id = Integer.parseInt(claims.get("id").toString());;
-        if(!admin){
+        if(!admin.equals("true")){
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode sectionId = rootNode.get("sectionId");
             List<JsonNode> list = new ArrayList<>();
@@ -675,10 +682,10 @@ public class UserAndCourseServlet extends BaseServlet{
         Object details = "添加失败";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        boolean admin = (boolean)claims.get("admin");
+        String admin = (String)claims.get("admin");
         int id = Integer.parseInt(claims.get("id").toString());;
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
-        if (admin) {
+        if (admin.equals("true")) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
             JsonNode startTime = rootNode.get("startTime");
             JsonNode endTime = rootNode.get("endTime");

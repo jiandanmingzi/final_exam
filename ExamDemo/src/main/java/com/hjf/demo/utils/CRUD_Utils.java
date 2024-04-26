@@ -1,9 +1,12 @@
 package com.hjf.demo.utils;
 
+import com.mysql.cj.x.protobuf.MysqlxExpr;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -20,25 +23,9 @@ public class CRUD_Utils {
                 .count();
 
         //比较占位符数量是否与可变参数数量相同
-        LOGGER.severe("The number of placeholder should be the same as the number of params");
+        System.out.println(cnt );
+        System.out.println(params.length);
         return cnt == params.length;
-    }
-
-    public static void setParameters(PreparedStatement ps,Object[] params) throws SQLException {
-        int num = 1;
-        //执行语句
-        for (Object param : params) {
-            if (param instanceof Object[]) {
-                Object[] objects = (Object[]) param;
-                for (Object object : objects) {
-                    ps.setObject(num, object);
-                    num++;
-                }
-            } else {
-                ps.setObject(num, param);
-                num++;
-            }
-        }
     }
 
     public static int update(String sql,Object... params) throws InterruptedException, SQLException {
@@ -46,7 +33,18 @@ public class CRUD_Utils {
             //获取链接
             Connection connection = Connection_Pool.getConnection();
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                setParameters(ps,params);
+                int num = 1;
+                for(Object param : params){
+                    if(param instanceof Object[]){
+                        for(Object o : (Object[]) param){
+                            ps.setObject(num, o);
+                            num++;
+                        }
+                    }else{
+                        ps.setObject(num, param);
+                        num++;
+                    }
+                }
                 //返回影响的数据的条数
                 return ps.executeUpdate();
             } finally {
@@ -63,7 +61,18 @@ public class CRUD_Utils {
             Connection connection = Connection_Pool.getConnection();
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 //执行语句
-                setParameters(ps,params);
+                int num = 1;
+                for(Object param : params){
+                    if(param instanceof Object[]){
+                        for(Object o : (Object[]) param){
+                            ps.setObject(num, o);
+                            num++;
+                        }
+                    }else{
+                        ps.setObject(num, param);
+                        num++;
+                    }
+                }
                 try (ResultSet rs = ps.executeQuery()) {
                     return handler.handle(rs);
                 }

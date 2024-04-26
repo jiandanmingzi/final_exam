@@ -14,6 +14,9 @@ public class SetResponse_Utils {
         map.put("status", status);
         map.put("message", message);
         map.put("details", details);
+        System.out.println(status);
+        System.out.println(message);
+        System.out.println(details);
         String jsonString = new ObjectMapper().writeValueAsString(map);
         response.getWriter().write(jsonString);
         response.setStatus(status);

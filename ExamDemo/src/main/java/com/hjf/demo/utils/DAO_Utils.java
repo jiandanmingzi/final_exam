@@ -10,6 +10,7 @@ public class DAO_Utils {
         for (String string:type){
             stringJoiner.add(string);
         }
+        System.out.println(stringJoiner);
         return CRUD_Utils.query(stringJoiner.toString(),rs -> {
             List<Map<String, Object>> dataList = new ArrayList<>();
             while (rs.next()) {
@@ -33,18 +34,19 @@ public class DAO_Utils {
         Set<String> keys = map.keySet();
         List<Object> keyValueList = new ArrayList<>();
         for (String key : keys) {
-            keyJoiner.add("?");
+            keyJoiner.add(key);
             valueJoiner.add("?");
-            keyValueList.add(key);
             keyValueList.add(map.get(key));
+            System.out.println(map.get(key));
         }
         String sql = keyJoiner.toString() + valueJoiner;
         Object[] objects = keyValueList.toArray(new Object[0]);
+        System.out.println(sql);
         return (CRUD_Utils.update(sql, objects) == 1);
     }
 
     public static boolean update(String table, int id ,Map<String, Object> map) throws SQLException, InterruptedException {
-        var stringJoiner = new StringJoiner(" , ","UPDATE " + table + " SET ","WHERE id = ?");
+        var stringJoiner = new StringJoiner(" , ","UPDATE " + table + " SET "," WHERE id = ?");
         Set<String> keys = map.keySet();
         List<Object> keyValueList = new ArrayList<>();
         for (String key : keys) {
@@ -53,6 +55,7 @@ public class DAO_Utils {
             keyValueList.add(map.get(key));
         }
         Object[] objects = keyValueList.toArray(new Object[0]);
+        System.out.println(stringJoiner);
         return (CRUD_Utils.update(stringJoiner.toString(), objects,id) == 1);
     }
 

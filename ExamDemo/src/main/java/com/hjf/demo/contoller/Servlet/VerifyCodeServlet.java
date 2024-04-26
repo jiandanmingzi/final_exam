@@ -58,7 +58,7 @@ public class VerifyCodeServlet extends BaseServlet{
             request.getSession().removeAttribute(codeType);
             SetResponse_Utils.setResponse(response ,200, "success", "验证通过");
         }else{
-            SetResponse_Utils.setResponse(response ,200, "false", "验证码错误");
+            SetResponse_Utils.setResponse(response ,400, "false", "验证码错误");
         }
     }
 }

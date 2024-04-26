@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
         set.add("id");
         set.add("authenticated");
         set.add("admin");
+        System.out.println(11);
         List<User> list = userDao.select("account",account,set);
         if (list != null && (!list.isEmpty())) {
             User user = list.get(0);

@@ -13,11 +13,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-@WebFilter(urlPatterns = "/user/*")
+@WebFilter(urlPatterns = "/userAndCourseServlet")
 public class Filter1_CheckUser implements Filter {
     private final Logger LOGGER = Logger.getLogger(Filter1_CheckUser.class.toString());
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println(1111);
         int status;
         String message;
         Object details;
@@ -27,12 +28,11 @@ public class Filter1_CheckUser implements Filter {
                 JWT_Utils.verify(authHeader.substring(7));
                 Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
                 if (claims.get("id") != null && claims.get("authenticated") != null && claims.get("admin") != null){
-                    if (!(boolean)claims.get("authenticated")){
-                        status = 400;
+                    if (claims.get("authenticated").equals("false")){
+                        status = 300;
                         message = "false";
                         details = "请先完成实名制";
                         SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
-                        ((HttpServletResponse)response).sendRedirect("/login.html");
                     }else{
                         filterChain.doFilter(request,response);
                     }
@@ -42,7 +42,6 @@ public class Filter1_CheckUser implements Filter {
                     message = "false";
                     details = "请先登录";
                     SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
-                    ((HttpServletResponse)response).sendRedirect("/login.html");
                 }
             }catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e){
                 LOGGER.severe("Invalid authentication:" + e.getMessage());
@@ -50,7 +49,6 @@ public class Filter1_CheckUser implements Filter {
                 message = "false";
                 details = "请先登录";
                 SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
-                ((HttpServletResponse)response).sendRedirect("/login.html");
             }
         }else{
             LOGGER.severe("Unlogged Access");
@@ -58,7 +56,6 @@ public class Filter1_CheckUser implements Filter {
             message = "false";
             details = "请先登录";
             SetResponse_Utils.setResponse((HttpServletResponse) response,status,message,details);
-            ((HttpServletResponse)response).sendRedirect("/login.html");
         }
 
     }

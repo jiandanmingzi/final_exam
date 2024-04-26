@@ -24,12 +24,15 @@
     var courseId = +url.searchParams.get("courseId");
     function showPartSection(partId){
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/courseServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "showPartSection",
@@ -52,12 +55,15 @@
     }
     function showCourseDetails() {
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/courseServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "showCourseDetails",
@@ -85,12 +91,15 @@
     }
     function showCoursePart(){
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/courseServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "showCoursePart",
@@ -116,12 +125,15 @@
     }
     function checkIsAdmin(){
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "checkIsAdmin"
@@ -141,12 +153,15 @@
     }
     function checkUserAndCourse(){
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "checkIsStudent"
@@ -158,12 +173,15 @@
                     }else{
                         if (!admin){
                             $.ajax({
-                                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                                url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                                 type: 'POST',
                                 dataType: 'json',
                                 contentType: 'application/json',
-                                beforeSend: function (request) {
-                                    request.setRequestHeader("Authorization", localStorage.getItem("token"));
+                                beforeSend: function (xhr) {
+                                    var token = sessionStorage.getItem('token');
+                                    if (token) {
+                                        xhr.setRequestHeader('Authorization',  token);
+                                    }
                                 },
                                 data: JSON.stringify({
                                     "method": "getMySchedule",

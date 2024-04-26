@@ -13,12 +13,15 @@
     var sectionId = +url.searchParams.get("sectionId");
     $(document).ready(function(){
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/courseServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "study",
@@ -36,12 +39,15 @@
                     }
                     $("body").append(newSection, newContent);
                     $.ajax({
-                        url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                        url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                         type: 'POST',
                         dataType: 'json',
                         contentType: 'application/json',
-                        beforeSend: function (request) {
-                            request.setRequestHeader("Authorization", localStorage.getItem("token"));
+                        beforeSend: function (xhr) {
+                            var token = sessionStorage.getItem('token');
+                            if (token) {
+                                xhr.setRequestHeader('Authorization',  token);
+                            }
                         },
                         data: JSON.stringify({
                             "method": "checkIsFinished",

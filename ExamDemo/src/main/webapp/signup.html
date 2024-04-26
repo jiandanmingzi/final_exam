@@ -160,7 +160,7 @@
             })
         });
         $('#loginBtn').click(function () {
-            window.location.href = "http://localhost:8080/ExamDemo_war_exploded/signup.html";
+            window.location.href = "http://localhost:8080/ExamDemo_war_exploded/login.html";
         });
         $('#registerBtn').click(function () {
             var account = $('#userAccount').val();
@@ -171,6 +171,7 @@
             $.ajax({
                 url: "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet",
                 type: 'POST',
+                async: false,
                 contentType: 'application/json',
                 data:JSON.stringify({
                     method:'VerifyCode',
@@ -181,6 +182,7 @@
                         $.ajax({
                             url: 'http://localhost:8080/ExamDemo_war_exploded/userServlet',
                             type: 'POST',
+                            async: false,
                             dataType: 'json',
                             contentType: 'application/json',
                             data: JSON.stringify({
@@ -190,24 +192,25 @@
                                 email:email,
                                 username:username
                             }),
-                            success: function (response) {
-                                if (response.message === "success") {
-                                    alert(response.details);
-                                    window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/login.html';
+                            success: function (data) {
+                                alert(data.details);
+                                if (data.message === "success") {
+                                    alert(data.details);
+                                    window.location.href = "http://localhost:8080/ExamDemo_war_exploded/login.html";
                                 } else {
-                                    $('#message').text(response.details).show();
+                                    alert(data.details);
                                 }
                             },
-                            error: function () {
-                                $('#message').text('请求失败，请检查您的网络连接。').show();
+                            error: function (data) {
+                                alert(data.details);
                             }
                         })
                     }else {
-                        $('#message').text(response.details).show();
+                        alert(response.details);
                     }
                 },
-                error: function() {
-                    $('#message').text('请求失败，请检查您的网络连接。').show();
+                error: function(response) {
+                    alert(response.details);
                 }
             })
         });
@@ -215,7 +218,6 @@
             var newSrc = "http://localhost:8080/ExamDemo_war_exploded/verifyCodeServlet?method=getPictureCode&" + new Date().getMilliseconds();
             $("#codeImg").attr("src", newSrc);
         });
-
     });
 </script>
 </html>

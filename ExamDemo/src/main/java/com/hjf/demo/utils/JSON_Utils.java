@@ -21,8 +21,10 @@ public class JSON_Utils {
     }
 
     public static boolean checkNode(List<JsonNode> list){
+        int num = 0;
         for (JsonNode node : list) {
-            if (node == null || !node.isNull()) {
+            System.out.println(num++);
+            if (node == null || node.isNull()) {
                 return false;
             }
         }

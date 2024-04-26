@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <form>
+    <div>
         <p>您的身份</p>
         <input type="radio" id="option1" name="admin" value="false">
         <label for="option1">学生</label>
@@ -64,7 +64,7 @@
             <br>
         </div>
         <button id="submitBtn" disabled>上传</button>
-    </form>
+    </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -107,7 +107,7 @@
                 }
             }
         });
-        $('#realName, #introduction, #studentId, #college, #major, #grade, #class, #teach, #submitBtn').on('input', function (){
+        $('#realName, #introduction, #studentId, #college, #major, #grade, #clazz, #teach, #identifier').on('input', function (){
             var realName = $('#realName').val();
             var introduction = $('#introduction').val();
             if (realName && introduction) {
@@ -147,23 +147,29 @@
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        var token = sessionStorage.getItem('token');
+                        if (token) {
+                            xhr.setRequestHeader('Authorization',  token);
+                        }
+                    }, 
                     data: JSON.stringify({
-                        method: 'authentication',
-                        admin: admin,
-                        realName: realName,
-                        introduction: introduction,
-                        studentId: studentId,
-                        college: college,
-                        major: major,
-                        grade: grade,
-                        clazz: clazz
+                        "method": 'authentication',
+                        "admin": admin,
+                        "realName": realName,
+                        "introduction": introduction,
+                        "studentId": studentId,
+                        "college": college,
+                        "major": major,
+                        "grade": grade,
+                        "clazz": clazz
                     }), success: function (response) {
                         if (response.message === "success") {
                             sessionStorage.setItem('token', response.details);
                             alert("认证成功！");
-                            window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/home.html';
+                            window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/myself.html';
                         } else {
-                            $('#message').text(response.details).show();
+                            alert(response.details);
                         }
                     }, error: function () {
                         $('#message').text('请求失败，请检查您的网络连接。').show();
@@ -179,23 +185,23 @@
                     beforeSend: function (xhr) {
                         var token = sessionStorage.getItem('token');
                         if (token) {
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                            xhr.setRequestHeader('Authorization',  token);
                         }
                     }, 
                     data: JSON.stringify({
-                        method: 'authentication',
-                        admin: admin,
-                        realName: realName,
-                        introduction: introduction,
-                        teach: teach,
-                        identifier: identifier
+                        "method": 'authentication',
+                        "admin": admin,
+                        "realName": realName,
+                        "introduction": introduction,
+                        "teach": teach,
+                        "identifier": identifier
                     }), success: function (response) {
                         if (response.message === "success") {
-                            sessionStorage.setItem('token', response.details);
+                            sessionStorage.setItem('token', 'Bearer ' + response.details);
                             alert("认证成功！");
-                            window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/home.html';
+                            window.location.href = 'http://localhost:8080/ExamDemo_war_exploded/myself.html';
                         } else {
-                            $('#message').text(response.details).show();
+                            alert(response.details);
                         }
                     }, error: function () {
                         $('#message').text('请求失败，请检查您的网络连接。').show();

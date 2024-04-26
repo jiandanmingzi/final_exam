@@ -1,5 +1,6 @@
 package com.hjf.demo.Dao.Impl;
 
+import com.hjf.demo.Bean.AllCourseFactory;
 import com.hjf.demo.Dao.*;
 import com.hjf.demo.Dao.UserDao;
 import com.hjf.demo.Service.CourseService;
@@ -16,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class User_CourseDaoImpl implements User_CourseDao {
-    private final String table = "course-student";
-    private final CourseService courseService = new CourseServiceImpl();
+    private final String table = "user_course";
     private final UserDao userDao = new UserDaoImpl();
     @Override
     public List<Course> selectCourse(String dataType, Object data) throws SQLException, InterruptedException {
@@ -28,7 +28,7 @@ public class User_CourseDaoImpl implements User_CourseDao {
         if (maps != null && !maps.isEmpty()) {
             courses = new ArrayList<>();
             for (Map<String, Object> map : maps) {
-                Course course = courseService.getCourse((int)map.get("courseId"));
+                Course course = AllCourseFactory.getInstance().getCourse((int)map.get("courseId"));
                 courses.add(course);
             }
         }

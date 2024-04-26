@@ -61,14 +61,15 @@
     var admin = false;
     function getData() {
         return $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
+            async: false,
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
             beforeSend: function (xhr) {
                 var token = sessionStorage.getItem('token');
                 if (token) {
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                    xhr.setRequestHeader('Authorization', token);
                 }
             },
             data: JSON.stringify({
@@ -92,7 +93,7 @@
                         var newTeachLabel = $('<label for="newTeach" class="bound-input">修改教授学科：</label>');
                         var newTeach = $('<input type="text" id="newTeach" value="" class="bound-input" required>');
                         $('#newTeach', newTeach).val(response.details.teach);
-                        $('#changeSelfInfo').append(newTeachLabel, newBr, newTeach, newBr);
+                        $('#selfInfo').append(newTeachLabel, newBr, newTeach, newBr);
                     } else {
                         $('#admin').text('学生');
                         var studentIdElement = $('<p>学号：<span id="studentId"><span></p>');
@@ -121,14 +122,21 @@
                         var newClazzLabel = $('<label for="newClazz" class="bound-input">修改班级：</label>');
                         var newClazz = $('<input type="text" id="newClazz" value="" class="bound-input" required>');
                         $('#newClazz', newClazz).val(response.details.clazz);
-                        $('#changeSelfInfo').append(newStudentIdLabel, newBr, newStudentId, newBr, newCollegeLabel, newBr, newCollege, newBr, newMajorLabel, newBr, newMajor, newBr, newGradeLabel, newBr, newGrade, newBr, newClazzLabel, newBr, newClazz, newBr);
+                        $('#selfInfo').append(newStudentIdLabel, newBr, newStudentId, newBr, newCollegeLabel, newBr, newCollege, newBr, newMajorLabel, newBr, newMajor, newBr, newGradeLabel, newBr, newGrade, newBr, newClazzLabel, newBr, newClazz, newBr);
                     }
                 } else {
                     alert(response.details);
                 }
             },
-            error: function (data) {
-                alert(data.details);
+            error: function (jqXHR) {
+                var statusCode = jqXHR.status;
+                switch(statusCode){
+                    case 300:
+                        alert("未实名制");
+                        window.event.returnValue = false;
+                        window.location.href = "http://localhost:8080/ExamDemo_war_exploded/authentication.html";
+                        break;
+                }
             }
         });
     }
@@ -154,14 +162,14 @@
             var newQQ = $('#newQQ').val();
             var newIntroduction = $('#newIntroduction').val();
             $.ajax({
-                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                 type: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
                 beforeSend: function (xhr) {
                     var token = sessionStorage.getItem('token');
                     if (token) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                        xhr.setRequestHeader('Authorization',  token);
                     }
                 },
                 data: JSON.stringify({
@@ -189,14 +197,14 @@
             if (admin) {
                 var newTeach = $('#newTeach').val();
                 $.ajax({
-                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json',
                     beforeSend: function (xhr) {
                         var token = sessionStorage.getItem('token');
                         if (token) {
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                            xhr.setRequestHeader('Authorization',  token);
                         }
                     },
                     data: JSON.stringify({
@@ -223,14 +231,14 @@
                 var newGrade = $('#newGrade').val();
                 var newClazz = $('#newClazz').val();
                 $.ajax({
-                    url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                    url: 'http://localhost:8080/ExamDemo_war_exploded/userAndCourseServlet',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json',
                     beforeSend: function (xhr) {
                         var token = sessionStorage.getItem('token');
                         if (token) {
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                            xhr.setRequestHeader('Authorization',  token);
                         }
                     },
                     data: JSON.stringify({

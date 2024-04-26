@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/user/courseServlet")
+@WebServlet("/courseServlet")
 public class CourseServlet extends BaseServlet{
     private final SectionService sectionService = new SectionServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();

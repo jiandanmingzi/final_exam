@@ -1,11 +1,9 @@
 package com.hjf.demo.Dao.Impl;
 
 import com.hjf.demo.Dao.AuthenticateDao;
-import com.hjf.demo.entity.Part;
 import com.hjf.demo.utils.DAO_Utils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;

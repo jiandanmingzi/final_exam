@@ -31,7 +31,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             set.add("college");
             set.add("major");
             set.add("grade");
-            set.add("Class");
+            set.add("clazz");
         }
         return authenticateDao.select(userId, admin, set);
     }

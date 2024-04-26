@@ -15,12 +15,15 @@
         var newHr = $("<hr>");
         var newBr = $("<br>");
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/courseServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "getSomeCourses",
@@ -33,7 +36,7 @@
                         var newCourse = $("<a href='http://localhost:8080/ExamDemo_war_exploded/course/courseDetail.html?courseId=" + item.courseId + "'>" + item.courseName + "</a>");
                         var newStudentNum = $("<p>学生人数：" + item.student + "</p>");
                         var maxStudent = $("<p>最大人数：" + item.maxStudent + "</p>");
-                        var newTeacher = $("<p>课程老师:<a href='http://localhost:8080/ExamDemo_war_exploded/user/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a></p>");
+                        var newTeacher = $("<p>课程老师:<a href='http://localhost:8080/ExamDemo_war_exploded/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a></p>");
                         var newStartTime = $("<p>开始日期：" + item.startDate + "</p>");
                         var newEndTime = $("<p>结束日期：" + item.endDate + "</p>");
                         $("body").append(newHr, newCourse, newStartTime, maxStudent, newBr, newTeacher, newStartTime, newEndTime);
@@ -45,12 +48,15 @@
     }
     $(document).ready(function(){
         $.ajax({
-            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            url: 'http://localhost:8080/ExamDemo_war_exploded/courseServlet',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            beforeSend: function (xhr) {
+                var token = sessionStorage.getItem('token');
+                if (token) {
+                    xhr.setRequestHeader('Authorization',  token);
+                }
             },
             data: JSON.stringify({
                 "method": "getCourseNum"
