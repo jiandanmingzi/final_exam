@@ -43,7 +43,9 @@ public class User_ExerServiceImpl implements User_ExerService {
         HashSet<String> set = new HashSet<>();
         set.add("id");
         set.add("partId");
+        set.add("courseId");
         set.add("accuracy");
+        set.add("exercisesNum");
         set.add("rightExercise");
         set.add("wrongExercise");
         return user_exerciseDao.getUser_Exer("userId", userId, set);
@@ -71,5 +73,30 @@ public class User_ExerServiceImpl implements User_ExerService {
     public boolean deleteUser_Exer(int partId) throws SQLException, InterruptedException {
         user_exerciseDao.deleteAllUser_Exer(partId);
         return true;
+    }
+
+    public Map<String, Object> getExercisesSchedule(int userId, int courseId) throws SQLException, InterruptedException, JsonProcessingException {
+        Map<String, Object> map = null;
+        int exerciseNum = 0;
+        int exercisesNum = 0;
+        float accuracy = 0;
+        String user_course = userId + "_" + courseId;
+        HashSet<String> set = new HashSet<>();
+        set.add("accuracy");
+        set.add("exercisesNum");
+        List<User_Exer> list = user_exerciseDao.getUser_Exer("user_course", user_course, set);
+        if(list != null && !list.isEmpty()) {
+            map = new HashMap<>();
+            for (User_Exer user_exer : list) {
+                float temp = accuracy * exerciseNum;
+                exercisesNum++;
+                exerciseNum += user_exer.getExercisesNum();
+                accuracy = (temp + user_exer.getAccuracy() * user_exer.getExercisesNum()) / exerciseNum;
+            }
+            map.put("exerciseNum", exerciseNum);
+            map.put("accuracy", accuracy);
+            map.put("exercisesNum", exercisesNum);
+        }
+        return map;
     }
 }

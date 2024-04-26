@@ -14,10 +14,37 @@ public class User_Exer {
     private  int id;
     private int userId;
     private int partId;
+    private int courseId;
+    private int exercisesNum = 0;
     private float accuracy;
     private String identifier;
+    private String user_course;
     private Map<Integer, String> rightExercise = new HashMap<>();
     private Map<Integer, String> wrongExercise = new HashMap<>();
+
+    public String getUser_course() {
+        return user_course;
+    }
+
+    public void setUser_course(String user_course) {
+        this.user_course = user_course;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+
+    public int getExercisesNum() {
+        return exercisesNum;
+    }
+
+    public void setExercisesNum(int exercisesNum) {
+        this.exercisesNum = exercisesNum;
+    }
 
     public int getId() {
         return id;
@@ -84,11 +111,13 @@ public class User_Exer {
     public void updateRightExercise(int exerciseId, String answer) {
         this.rightExercise.put(exerciseId, answer);
         this.accuracy = (float) this.rightExercise.size() / (this.rightExercise.size() + this.rightExercise.size());
+        this.exercisesNum++;
     }
 
     public void removeRightExercise(int exerciseId) {
         this.rightExercise.remove(exerciseId);
         this.accuracy = (float) this.rightExercise.size() / (this.rightExercise.size() + this.rightExercise.size());
+        this.exercisesNum--;
     }
 
     public String getWrongExercise() throws JsonProcessingException {
@@ -116,10 +145,12 @@ public class User_Exer {
     public void updateWrongExercise(int exerciseId, String answer) {
         this.wrongExercise.put(exerciseId, answer);
         this.accuracy = (float) this.rightExercise.size() / (this.rightExercise.size() + this.rightExercise.size());
+        this.exercisesNum++;
     }
 
     public void removeWrongExercise(int exerciseId) {
         this.wrongExercise.remove(exerciseId);
         this.accuracy = (float) this.rightExercise.size() / (this.rightExercise.size() + this.rightExercise.size());
+        this.exercisesNum--;
     }
 }

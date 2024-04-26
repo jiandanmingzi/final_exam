@@ -1,10 +1,11 @@
 package com.hjf.demo.contoller.Servlet;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.hjf.demo.Dao.Impl.User_SectionDaoImpl;
+import com.hjf.demo.Dao.User_SectionDao;
 import com.hjf.demo.Service.*;
 import com.hjf.demo.Service.Impl.*;
-import com.hjf.demo.entity.Course;
-import com.hjf.demo.entity.User;
+import com.hjf.demo.entity.*;
 import com.hjf.demo.utils.JSON_Utils;
 import com.hjf.demo.utils.JWT_Utils;
 import com.hjf.demo.utils.SetResponse_Utils;
@@ -17,10 +18,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -34,6 +32,7 @@ public class UserAndCourseServlet extends BaseServlet{
     private final SectionService sectionService = new SectionServiceImpl();
     private final User_ExerService userExerService = new User_ExerServiceImpl();
     private final AuthenticateService authenticateService = new AuthenticateServiceImpl();
+    private final User_SectionDao userSectionDao = new User_SectionDaoImpl();
     public void showMyInfo(HttpServletRequest request, HttpServletResponse response) throws SQLException, InterruptedException, IOException {
         String authHeader = request.getHeader("Authorization");
         int id = (int) JWT_Utils.getClaims(authHeader.substring(7)).get("id");
@@ -268,7 +267,7 @@ public class UserAndCourseServlet extends BaseServlet{
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
         boolean admin = (boolean)claims.get("admin");
-        int teacherId = (int)claims.get("id");
+        int teacherId = Integer.parseInt(claims.get("id").toString());
         if (admin) {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode courseId = rootNode.get("courseId");
@@ -286,6 +285,7 @@ public class UserAndCourseServlet extends BaseServlet{
             list.add(partId);
             if (JSON_Utils.checkNode(list)) {
                 if (sectionService.addSection(sectionName.asText(), teacherId, partId.asInt(), sort.asInt(), type.asText(), introduction.asText(), courseId.asInt())) {
+                    courseService.AddSectionToCourse(courseId.asInt());
                     status = 200;
                     message = "success";
                     details = "添加成功";
@@ -307,10 +307,13 @@ public class UserAndCourseServlet extends BaseServlet{
         if (admin) {
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode sectionId = rootNode.get("sectionId");
+            JsonNode courseId = rootNode.get("courseId");
             List<JsonNode> list = new ArrayList<>();
             list.add(sectionId);
+            list.add(courseId);
             if (JSON_Utils.checkNode(list)) {
                 if (sectionService.deleteSection(sectionId.asInt())) {
+                    courseService.DeleteSectionFromCourse(courseId.asInt());
                     status = 200;
                     message = "success";
                     details = "删除成功";
@@ -353,6 +356,21 @@ public class UserAndCourseServlet extends BaseServlet{
         SetResponse_Utils.setResponse(response, status, message, details);
     }
 
+    public void showMyExerciseHistory(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 200;
+        String message = "false";
+        Object details = "查询失败";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        boolean admin = (boolean)claims.get("admin");
+        if(!admin){
+            int userId = Integer.parseInt(claims.get("id").toString());
+            details = userExerService.getUser_ExerByUser(userId);
+            message = "success";
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
     public void addExercise(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
         int status = 400;
         String message = "false";
@@ -377,6 +395,12 @@ public class UserAndCourseServlet extends BaseServlet{
             list.add(type);
             if (JSON_Utils.checkNode(list)) {
                 if(exerciseService.addExercises(partId.asInt(), sort.asInt(), courseId.asInt(), type.asText(), content.asText(), answer.asText())){
+                    Part part = partService.getPart(partId.asInt());
+                    if (!part.isHasExercises()){
+                        partService.setPartExercise(partId.asInt(), true);
+                        courseService.AddExercisesToCourse(courseId.asInt());
+                    }
+                    courseService.AddExerciseToCourse(courseId.asInt());
                     status = 200;
                     message = "success";
                     details = "添加成功";
@@ -400,10 +424,13 @@ public class UserAndCourseServlet extends BaseServlet{
         if (admin){
             JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
             JsonNode exerciseId = rootNode.get("exerciseId");
+            JsonNode courseId = rootNode.get("courseId");
             List<JsonNode> list = new ArrayList<>();
+            list.add(courseId);
             list.add(exerciseId);
             if (JSON_Utils.checkNode(list)) {
                 if (exerciseService.deleteExercises(exerciseId.asInt())) {
+                    courseService.RemoveExerciseFromCourse(courseId.asInt());
                     status = 200;
                     message = "success";
                     details = "删除成功";
@@ -455,7 +482,7 @@ public class UserAndCourseServlet extends BaseServlet{
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
         boolean admin = (boolean)claims.get("admin");
-        int id = (int)claims.get("id");
+        int id = Integer.parseInt(claims.get("id").toString());;
         if (admin){
             details = "老师不能做题";
         }else {
@@ -478,14 +505,177 @@ public class UserAndCourseServlet extends BaseServlet{
         SetResponse_Utils.setResponse(response, status, message, details);
     }
 
-    public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
-        int status;
-        String message;
-        Object details;
+    public void checkTeacher(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 200;
+        String message = "success";
+        Object details = "isnot";
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
         boolean admin = (boolean)claims.get("admin");
-        int id = (int)claims.get("id");
+        if (admin){
+            details = "is";
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
+    public void checkIsAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 400;
+        String message = "false";
+        Object details = "不是该课程的老师";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        boolean admin = (boolean)claims.get("admin");
+        if (admin){
+            int id = Integer.parseInt(claims.get("id").toString());;
+            JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
+            JsonNode courseId = rootNode.get("courseId");
+            List<JsonNode> list = new ArrayList<>();
+            list.add(courseId);
+            if (JSON_Utils.checkNode(list)) {
+                Course course = courseService.getCourse(courseId.asInt());
+                if (course.getId() == id){
+                    status = 200;
+                    message = "success";
+                    details = "是该课程的老师";
+                }
+            }else {
+                details = "数据不完整";
+            }
+        }else {
+            status = 200;
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
+    public void checkUserAndCourse(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 400;
+        String message = "false";
+        Object details = "已添加";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        int id = Integer.parseInt(claims.get("id").toString());
+        boolean admin = (boolean)claims.get("admin");
+        JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
+        JsonNode courseId = rootNode.get("courseId");
+        List<JsonNode> list = new ArrayList<>();
+        list.add(courseId);
+        if (JSON_Utils.checkNode(list)) {
+            if (!admin){
+                if (!courseService.checkUserAndCourse(id, courseId.asInt())) {
+                    status = 200;
+                    message = "success";
+                    details = "unAdded";
+                }else {
+                    status = 200;
+                    message = "success";
+                    details = "add";
+                }
+            }else {
+                status = 200;
+                details = "是老师";
+            }
+        }else{
+            details = "数据不完整";
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
+    public void getMySchedule(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 400;
+        String message = "false";
+        Object details = "数据不完善";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        boolean admin = (boolean)claims.get("admin");
+        int id = Integer.parseInt(claims.get("id").toString());;
+        if (admin){
+            details = "老师没有学习记录";
+        }else {
+            JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
+            JsonNode courseId = rootNode.get("courseId");
+            List<JsonNode> list = new ArrayList<>();
+            list.add(courseId);
+            if (JSON_Utils.checkNode(list)) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("sectionSchedule", courseService.getSectionSchedule(id, courseId.asInt()));
+                map.putAll(userExerService.getExercisesSchedule(id, courseId.asInt()));
+                details = map;
+                status = 200;
+                message = "success";
+            }
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
+    public void getAllStudentSchedule(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 400;
+        String message = "false";
+        Object details = "";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        boolean admin = (boolean)claims.get("admin");
+        if (admin){
+            message = "success";
+            JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
+            JsonNode courseId = rootNode.get("courseId");
+            List<JsonNode> list = new ArrayList<>();
+            list.add(courseId);
+            if (JSON_Utils.checkNode(list)) {
+                details = courseService.getAllUserSchedule(courseId.asInt());
+                message = "success";
+                status = 200;
+            }
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
+    public void checkIsFinished(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 400;
+        String message = "false";
+        Object details = "查询失败";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        boolean admin = (boolean)claims.get("admin");
+        int id = Integer.parseInt(claims.get("id").toString());;
+        if(!admin){
+            JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
+            JsonNode sectionId = rootNode.get("sectionId");
+            List<JsonNode> list = new ArrayList<>();
+            list.add(sectionId);
+            if (JSON_Utils.checkNode(list)) {
+                Map<String,Object> map = userSectionDao.getUser_section(id, sectionId.asInt());
+                if (map == null){
+                    Section section = sectionService.getSection(sectionId.asInt());
+                    userSectionDao.addUser_section(id, sectionId.asInt(), section.getCourseId());
+                    status = 200;
+                    message = "success";
+                    details = "unfinished";
+                }else {
+                    if ((boolean) map.get("finish") ){
+                        status = 200;
+                        message = "success";
+                        details = "finished";
+                    }else {
+                        status = 200;
+                        message = "success";
+                        details = "unfinished";
+                    }
+                }
+            }
+        }else {
+            details = "老师没有学习记录";
+        }
+        SetResponse_Utils.setResponse(response, status, message, details);
+    }
+
+    public void addCourse(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, InterruptedException {
+        int status = 200;
+        String message = "false";
+        Object details = "添加失败";
+        String authHeader = request.getHeader("Authorization");
+        Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
+        boolean admin = (boolean)claims.get("admin");
+        int id = Integer.parseInt(claims.get("id").toString());;
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         if (admin) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -539,21 +729,24 @@ public class UserAndCourseServlet extends BaseServlet{
             }
         }else{
             int courseId = rootNode.get("courseId").asInt();
-            Course course = courseService.getCourse(courseId);
-            if (course != null) {
-                if (courseService.addStudentToCourse(id, course)){
-                    status = 200;
-                    message = "success";
-                    details = "添加成功";
-                }else{
+            if (!courseService.checkUserAndCourse(id, courseId)) {
+                Course course = courseService.getCourse(courseId);
+                if (course != null) {
+                    if (courseService.addStudentToCourse(id, course)) {
+                        message = "success";
+                        details = "添加成功";
+                    } else {
+                        status = 400;
+                        message = "false";
+                        details = "人数已满";
+                    }
+                } else {
                     status = 400;
                     message = "false";
-                    details = "人数已满";
+                    details = "课程不存在";
                 }
             }else{
-                status = 400;
-                message = "false";
-                details = "课程不存在";
+                details = "不可重复添加";
             }
         }
         SetResponse_Utils.setResponse(response,status,message,details);

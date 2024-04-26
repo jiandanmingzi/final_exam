@@ -13,4 +13,5 @@ public interface User_ExerService {
     User_Exer getUser_Exer(String identifier) throws SQLException, InterruptedException, JsonProcessingException;
     User_Exer getUser_Exer(int id);
     boolean deleteUser_Exer(int partId) throws SQLException, InterruptedException;
+    Map<String, Object> getExercisesSchedule(int userId, int courseId) throws SQLException, InterruptedException, JsonProcessingException;
 }

@@ -9,6 +9,28 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function checkIsTeacher(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+            type:'POST',
+            dataType:'json',
+            contentType: 'application/json',
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "checkTeacher"
+            }),
+            success:function(response){
+                if(response.message === "success"){
+                    if(response.details === "is"){
+                        var newA = $("<a href='http://localhost:8080/ExamDemo_war_exploded/course/addCourse.html' class='teacher'>添加课程</a>");
+                        $("body").append(newA);
+                    }
+                }
+            }
+        });
+    }
     $(document).ready(function(){
         var newHr = $("<hr>");
         var newBr = $("<br>");
@@ -27,7 +49,7 @@
                 if(response.message === "success"){
                     $.each(response.details, function(index, item){
                         var newCourse = $("<a href='http://localhost:8080/ExamDemo_war_exploded/course/courseDetail.html?courseId=" + item.courseId + "'>" + item.courseName + "</a>");
-                        var newTeacher = $("<a href='http://localhost:8080/ExamDemo_war_exploded/user/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a>");
+                        var newTeacher = $("<a href='http://localhost:8080/ExamDemo_war_exploded/user/createCourse.html >" + 添加课程 + "</a>");
                         var newStartTime = $("<p>开始日期：" + item.startDate + "</p>");
                         var newEndTime = $("<p>结束日期：" + item.endDate + "</p>");
                         $("body").append(newHr, newCourse, newBr, newTeacher, newStartTime, newEndTime);
@@ -35,6 +57,7 @@
                 }
             }
         });
+        checkIsTeacher();
     });
 </script>
 </html>

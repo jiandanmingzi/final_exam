@@ -6,7 +6,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Course {
     private int id;
+    private int sectionNum;
     private int teacherId;
+    private int exerciseNum;
+    private int exercisesNum;
     private String courseName;
     private int maxStudent;
     private int student;
@@ -16,10 +19,13 @@ public class Course {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private final ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock sectionLock = new ReentrantLock();
+    private final ReentrantLock exerciseLock = new ReentrantLock();
+    private final ReentrantLock exercisesLock = new ReentrantLock();
 
     public Course(){}
 
-    public Course(int teacherId, String courseName, int student, int maxStudent, String teacherName, String introduction, LocalDateTime startDate, LocalDateTime endDate, boolean ready) {
+    public Course(int teacherId, String courseName, int student, int maxStudent, String teacherName, String introduction, LocalDateTime startDate, LocalDateTime endDate, boolean ready, int sectionNum) {
         this.teacherId = teacherId;
         this.courseName = courseName;
         this.maxStudent = maxStudent;
@@ -28,6 +34,74 @@ public class Course {
         this.startDate = startDate;
         this.endDate = endDate;
         this.ready = ready;
+        this.sectionNum = sectionNum;
+        this.student = student;
+    }
+
+    public int getExercisesNum() {
+        return exercisesNum;
+    }
+
+    public void setExercisesNum(int exercisesNum) {
+        this.exercisesNum = exercisesNum;
+    }
+
+    public void exercisesNumUP() throws InterruptedException {
+        if (exercisesLock.tryLock(1, TimeUnit.SECONDS)){
+            this.exercisesNum++;
+            exercisesLock.unlock();
+        }
+    }
+
+    public void exercisesNumDOWN() throws InterruptedException {
+        if (exercisesLock.tryLock(1, TimeUnit.SECONDS)){
+            this.exercisesNum--;
+            exercisesLock.unlock();
+        }
+    }
+
+    public int getExerciseNum() {
+        return exerciseNum;
+    }
+
+    public void setExerciseNum(int exerciseNum) {
+        this.exerciseNum = exerciseNum;
+    }
+
+    public void exerciseNumUP() throws InterruptedException {
+        if (exerciseLock.tryLock(1, TimeUnit.SECONDS)){
+            this.exerciseNum++;
+            exerciseLock.unlock();
+        }
+    }
+
+    public void exerciseNumDOWN() throws InterruptedException {
+        if (exerciseLock.tryLock(1, TimeUnit.SECONDS)){
+            this.exerciseNum--;
+            exerciseLock.unlock();
+        }
+    }
+
+    public int getSectionNum() {
+        return sectionNum;
+    }
+
+    public void setSectionNum(int sectionNum) {
+        this.sectionNum = sectionNum;
+    }
+
+    public void sectionNumUP() throws InterruptedException {
+        if (sectionLock.tryLock(1, TimeUnit.SECONDS)) {
+            this.sectionNum++;
+            sectionLock.unlock();
+        }
+    }
+
+    public void sectionNumDOWN() throws InterruptedException {
+        if(sectionLock.tryLock(1, TimeUnit.SECONDS)) {
+            this.sectionNum--;
+            sectionLock.unlock();
+        }
     }
 
     public boolean isReady() {
@@ -98,6 +172,7 @@ public class Course {
                     this.student--;
                     return true;
                 }
+                lock.unlock();
             }
         }
         return false;

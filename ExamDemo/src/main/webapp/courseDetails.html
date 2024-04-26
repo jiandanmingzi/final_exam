@@ -5,12 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-
+    <a href="" class="teacher" id="studentSchdeule">查询学生进度</a>
+    <a href="" class="teacher" id="changeCourse">修改课程</a>
+    <br>
+    <button id="addCourseBtn" class="student" disabled>报名课程</button>
+    <br>
+    <p id="mySchedule" class = "student">学习进度:<span id="schedule" class="student"></span></p>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var newHr = $("<hr>");
     var newBr = $("<br>");
+    var admin = false;
+    var sectionNum = 0;
+    var exerciseNum = 0;
+    var exercisesNum = 0;
     var url = new URL(window.location.href);
     var courseId = +url.searchParams.get("courseId");
     function showPartSection(partId){
@@ -34,6 +43,8 @@
                     $.each(response.details, function (index, item) {
                         var newSection = $("<a href='http://localhost:8080/ExamDemo_war_exploded/section.html?sectionId=" + item.id + "'>第 " + item.Ssort + " 节：" + item.sectionName + "</a>");
                         $("#"+partId).append(newSection);
+                        $('#studentSchdeule').attr('href', 'http://localhost:8080/ExamDemo_war_exploded/studentSchedule.html?courseId=' + courseId);
+                        $('#changeCourse').attr('href', 'http://localhost:8080/ExamDemo_war_exploded/changeCourse.html?courseId=' + courseId);
                     });
                 }
             }
@@ -55,17 +66,23 @@
             success: function (response) {
                 if (response.message === "success") {
                     var newCourse = $("<p>课程名称：" + response.details.courseName + "</p>");
-                    var newTeacher = $("<p>课程老师:<a href='http://localhost:8080/ExamDemo_war_exploded/userDetail.html?userId=" + item.teacherId + "'>" + item.teacherName + "</a></p>");
+                    var newTeacher = $("<p>课程老师:<a href='http://localhost:8080/ExamDemo_war_exploded/userDetail.html?userId=" + response.details.teacherId + "'>" + response.details.teacherName + "</a></p>");
                     var newStartTime = $("<p>开始日期：" + response.details.startDate + "</p>");
                     var newEndTime = $("<p>结束日期：" + response.details.endDate + "</p>");
                     var newStudentNum = $("<p>学生人数：" + response.details.student + "</p>");
                     var maxStudent = $("<p>最大人数：" + response.details.maxStudent + "</p>");
                     var newIntroudction = $("<p>课程介绍：" + response.details.introduction + "</p>");
-                    $("body").append(newCourse, newTeacher, newBr, newStartTime, newEndTime, newBr, newStudentNum, maxStudent, newBr, newIntroudction, newHr);
+                    sectionNum = response.details.exerciseNum
+                    var newSectionNum = $("<p>章节数：" + sectionNum + "</p>");
+                    exercisesNum = response.details.exercisesNum;
+                    var newExercisesNum = $("<p>练习题节数：" + exercisesNum + "</p>");
+                    exerciseNum = response.details.exerciseNum;
+                    var newExerciseNum = $("<p>练习题数：" + exerciseNum + "</p>");
+                    $("body").append(newCourse, newTeacher, newBr, newStartTime, newEndTime, newBr, newStudentNum, maxStudent, newBr, newIntroudction, newSectionNum, newExercisesNum, newExerciseNum, newHr);
                 }
             }
         });
-    };
+    }
     function showCoursePart(){
         $.ajax({
             url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
@@ -97,9 +114,78 @@
             }
         });
     }
+    function checkIsAdmin(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "checkIsAdmin"
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    $('.teacher').show();
+                    $('.student').hide()
+                    admin = true;
+                }else{
+                    $('.teacher').hide();
+                    $('.student').show()
+                    admin = false;
+                }
+            }
+        });
+    }
+    function checkUserAndCourse(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "checkIsStudent"
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    if(response.details === "unAdded"){
+                        $('#addCourseBtn').prop('disabled', false);
+                    }else{
+                        if (!admin){
+                            $.ajax({
+                                url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+                                type: 'POST',
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                beforeSend: function (request) {
+                                    request.setRequestHeader("Authorization", localStorage.getItem("token"));
+                                },
+                                data: JSON.stringify({
+                                    "method": "getMySchedule",
+                                    "courseId": courseId
+                                }),
+                                success: function (response) {
+                                    if (response.message === "success") {
+                                        $("#schedule").text("小节进度：" + response.details.sectionSchedule + "/" + sectionNum + "练习节数进度："  + response.details.exercisesNum + "/" + exercisesNum + "总练习题进度：" + response.details.exerciseNum + "/" + exerciseNum + "正确率：" + response.details.accuracy);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
     $(document).ready(function(){
         showCourseDetails();
         showCoursePart();
+        checkIsAdmin();
+        checkUserAndCourse();
     });
 </script>
 </html>

@@ -3,6 +3,7 @@ package com.hjf.demo.Service.Impl;
 import com.hjf.demo.Dao.Impl.SectionDaoImpl;
 import com.hjf.demo.Dao.SectionDao;
 import com.hjf.demo.Service.SectionService;
+import com.hjf.demo.entity.Course;
 import com.hjf.demo.entity.Section;
 
 import java.sql.SQLException;

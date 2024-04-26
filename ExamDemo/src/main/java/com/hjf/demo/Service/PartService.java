@@ -12,4 +12,5 @@ public interface PartService {
     boolean addPart(int courseId, String partName, int sort) throws SQLException, InterruptedException;
     boolean deletePart(int id) throws SQLException, InterruptedException;
     boolean changePartName(int id, String partName) throws SQLException, InterruptedException;
+    public void setPartExercise(int id, boolean hasExercises) throws SQLException, InterruptedException;
 }

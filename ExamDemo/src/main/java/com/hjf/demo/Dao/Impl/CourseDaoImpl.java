@@ -22,8 +22,17 @@ public class CourseDaoImpl implements CourseDao {
             list = new ArrayList<>();
             for (Map<String, Object> map : Data){
                 Course course = new Course();
+                if (type.contains("exerciseNum")){
+                    course.setExerciseNum((int)map.get("exerciseNum"));
+                }
+                if (type.contains("exercisesNum")){
+                    course.setExercisesNum((int)map.get("exercisesNum"));
+                }
                 if (type.contains("ready")){
                     course.setReady((boolean) map.get("ready"));
+                }
+                if(type.contains("sectionNum")){
+                    course.setSectionNum((Integer) map.get("sectionNum"));
                 }
                 if (type.contains("teacherId"))
                 {

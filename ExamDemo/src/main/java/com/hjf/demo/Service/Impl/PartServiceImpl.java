@@ -31,6 +31,7 @@ public class PartServiceImpl implements PartService {
         set.add("id");
         set.add("partName");
         set.add("sort");
+        set.add("hasExercises");
         List<Part> parts = partDao.select("courseId", id, set);
         if (parts != null && !parts.isEmpty()){
             return parts.get(0);
@@ -52,7 +53,7 @@ public class PartServiceImpl implements PartService {
     @Override
     public boolean addPart(int courseId, String partName, int sort) throws SQLException, InterruptedException {
         String identifier = courseId + "-" + sort;
-        if (getPartByIdentifier(identifier) != null){
+        if (getPartByIdentifier(identifier) == null){
             Map<String, Object> map = new HashMap<>();
             map.put("courseId", courseId);
             map.put("sort", sort);
@@ -64,7 +65,7 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public boolean deletePart(int id) throws SQLException, InterruptedException {
-        return partDao.delete(id);
+        return (partDao.delete(id));
     }
 
     @Override
@@ -72,5 +73,12 @@ public class PartServiceImpl implements PartService {
         Map<String, Object> map = new HashMap<>();
         map.put("partName", partName);
         return partDao.update(id, map);
+    }
+
+    @Override
+    public void setPartExercise(int id, boolean hasExercises) throws SQLException, InterruptedException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("hasExercises", hasExercises);
+        partDao.update(id, map);
     }
 }

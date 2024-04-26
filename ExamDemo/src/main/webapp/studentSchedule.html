@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生进度一览</title>
+</head>
+<body>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     var url = new URL(window.location.href);
+    var courseId = +url.searchParams.get("courseId");
+    var sectionNum = 0;
+    var exerciseNum = 0;
+    var exercisesNum = 0;
+    function showCourseDetails() {
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/courseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "showCourseDetails",
+                "courseId": courseId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    var newCourse = $("<p>课程名称：" + response.details.courseName + "</p>");
+                    var newStartTime = $("<p>开始日期：" + response.details.startDate + "</p>");
+                    var newEndTime = $("<p>结束日期：" + response.details.endDate + "</p>");
+                    var newStudentNum = $("<p>学生人数：" + response.details.student + "</p>");
+                    var maxStudent = $("<p>最大人数：" + response.details.maxStudent + "</p>");
+                    var newIntroudction = $("<p>课程介绍：" + response.details.introduction + "</p>");
+                    sectionNum = response.details.exerciseNum
+                    var newSectionNum = $("<p>章节数：" + sectionNum + "</p>");
+                    exercisesNum = response.details.exercisesNum;
+                    var newExercisesNum = $("<p>练习题节数：" + exercisesNum + "</p>");
+                    exerciseNum = response.details.exerciseNum;
+                    var newExerciseNum = $("<p>练习题数：" + exerciseNum + "</p>");
+                    $("body").append(newCourse, newBr, newStartTime, newEndTime, newBr, newStudentNum, maxStudent, newBr, newIntroudction, newSectionNum,newExercisesNum, newExerciseNum, newHr);
+                }
+            }
+        });
+    }
+    function getAllStudentSchedule(){
+        $.ajax({
+            url: 'http://localhost:8080/ExamDemo_war_exploded/user/userAndCourseServlet',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", localStorage.getItem("token"));
+            },
+            data: JSON.stringify({
+                "method": "getAllStudentSchedule",
+                "courseId": courseId
+            }),
+            success: function (response) {
+                if (response.message === "success") {
+                    $.each(response.details, function (index, item) {
+                        var newStudent = $("<p>学生姓名：" + item.studentName + "</p>");
+                        var newSchedule = $("<p>小节进度：" + item.sectionSchedule + "/" + sectionNum + "练习节数进度：" + item.exercisesNum + "/" + exercisesNum + "总练习题进度：" + item.exerciseNum + "/" + exerciseNum + "正确率：" + item.accuracy + "</p>");
+                        $("body").append(newStudent, newSection, newExercise, newScore, newHr);
+                    });
+                }
+            }
+        });
+    }
+    $(document).ready(function(){
+        showCourseDetails();
+        getAllStudentSchedule();
+    });
+</script>
+</html>

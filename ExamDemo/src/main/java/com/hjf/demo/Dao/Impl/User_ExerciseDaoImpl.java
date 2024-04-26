@@ -26,8 +26,17 @@ public class User_ExerciseDaoImpl implements User_ExerciseDao {
                 if (set.contains("partId")) {
                     user_exer.setPartId((int) map.get("partId"));
                 }
+                if (set.contains("courseId")){
+                    user_exer.setCourseId((int) map.get("courseId"));
+                }
                 if (set.contains("accuracy")) {
                     user_exer.setAccuracy((float) map.get("accuracy"));
+                }
+                if (set.contains("user_course")){
+                    user_exer.setUser_course((String) map.get("user_course"));
+                }
+                if (set.contains("exercisesNum")){
+                    user_exer.setExercisesNum((int) map.get("exercisesNum"));
                 }
                 if (set.contains("identifier")) {
                     user_exer.setIdentifier((String) map.get("identifier"));
@@ -48,12 +57,15 @@ public class User_ExerciseDaoImpl implements User_ExerciseDao {
     @Override
     public boolean addUser_Exer(User_Exer user_exer) throws SQLException, InterruptedException, JsonProcessingException {
         Map<String, Object> map = new HashMap<>();
+        map.put("courseId", user_exer.getCourseId());
         map.put("userId", user_exer.getUserId());
         map.put("partId", user_exer.getPartId());
         map.put("accuracy", user_exer.getAccuracy());
+        map.put("exercisesNum", user_exer.getExercisesNum());
         map.put("identifier", user_exer.getIdentifier());
         map.put("rightExercise", user_exer.getRightExercise());
         map.put("wrongExercise", user_exer.getWrongExercise());
+        map.put("user_course", user_exer.getUser_course());
         return DAO_Utils.add(table, map);
     }
 

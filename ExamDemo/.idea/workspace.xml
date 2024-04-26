@@ -10,43 +10,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4156667a-4c3f-447f-8ba3-59491b4f019c" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/AuthenticateDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/AuthenticateService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/AuthenticateServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/allCourse.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/authentication.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/courseDetails.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/exercise.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/exerciseHistory.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/forgetPassword.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/myCourse.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/myself.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/section.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/signup.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/userDetails.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/109c73ef-8efe-4d83-a112-684129c63de9.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/109c73ef-8efe-4d83-a112-684129c63de9.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_SectionDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/User_SectionDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/studentSchedule.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseAndUserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseAndUserDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/PartDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/PartDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Bean/AllCourseBrief.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Bean/AllCourseBrief.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/CourseAndUserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/User_CourseDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseAndUserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_CourseDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/CourseDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_ExerciseDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Dao/Impl/User_ExerciseDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/CourseService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/CourseServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/ExerciseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/ExerciseServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/PartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/PartServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/SectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/SectionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/User_ExerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/Impl/User_ExerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter0_Encoding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Filter/Filter0_Encoding.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/BaseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/BaseServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/PartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/PartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/User_ExerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/Service/User_ExerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/CourseServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserAndCourseServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/UserServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/VerifyCodeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/contoller/Servlet/VerifyCodeServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Part.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Part.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/utils/SetResponse_Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User_Exer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hjf/demo/entity/User_Exer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/courseDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/courseDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/exerciseHistory.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/exerciseHistory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/myCourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/myCourse.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../文档/进度文档.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../文档/进度文档.docx" afterDir="false" />
     </list>
@@ -124,6 +110,20 @@
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\31601\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="66e5cadb-1e9d-421e-af77-7746e8d4ab5c" reportId="ExamDemo/qodana/2024-04-19" />
     </option>
+  </component>
+  <component name="RunAnythingCache">
+    <myKeys>
+      <visibility group="Gradle 任务" flag="true" />
+      <visibility group="Grunt" flag="true" />
+      <visibility group="Gulp" flag="true" />
+      <visibility group="HTTP 请求" flag="true" />
+      <visibility group="Maven 目标" flag="true" />
+      <visibility group="Node.js" flag="true" />
+      <visibility group="npm" flag="true" />
+      <visibility group="yarn" flag="true" />
+      <visibility group="最近的项目" flag="true" />
+      <visibility group="运行配置" flag="true" />
+    </myKeys>
   </component>
   <component name="RunManager">
     <configuration name="Tomcat 9.0.87" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.87" ALTERNATIVE_JRE_ENABLED="false">
@@ -209,7 +209,14 @@
       <workItem from="1713954439944" duration="330000" />
       <workItem from="1713954882484" duration="7374000" />
       <workItem from="1713966677173" duration="8799000" />
-      <workItem from="1714007286947" duration="12083000" />
+      <workItem from="1714007286947" duration="14676000" />
+      <workItem from="1714025420612" duration="1092000" />
+      <workItem from="1714027629996" duration="14000" />
+      <workItem from="1714027706448" duration="7593000" />
+      <workItem from="1714039004530" duration="7491000" />
+      <workItem from="1714048454333" duration="461000" />
+      <workItem from="1714051978722" duration="10209000" />
+      <workItem from="1714084275208" duration="5343000" />
     </task>
     <servers />
   </component>

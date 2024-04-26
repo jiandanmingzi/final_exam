@@ -59,6 +59,9 @@ public class CourseServlet extends BaseServlet{
         Course course = courseService.getCourse(id);
         if(course != null){
             Map<String, Object> courseMap = CourseToMap(course);
+            courseMap.put("sectionNum", course.getSectionNum());
+            courseMap.put("exerciseNum", course.getExerciseNum());
+            courseMap.put("exercisesNum", course.getExercisesNum());
             status = 200;
             message = "success";
             details = courseMap;
@@ -125,7 +128,7 @@ public class CourseServlet extends BaseServlet{
         if (JSON_Utils.checkNode(list)){
             String authHeader = request.getHeader("Authorization");
             Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-            int userId = (int)claims.get("id");
+            int userId = Integer.parseInt(claims.get("id").toString());
             boolean admin = (boolean)claims.get("admin");
             List<Exercise> exercises = exerciseService.getExercisesBelowPart(partId.asInt());
             if (exercises != null && !exercises.isEmpty()) {
@@ -177,7 +180,7 @@ public class CourseServlet extends BaseServlet{
         JsonNode rootNode = JSON_Utils.ReadJsonInRequest(request);
         String authHeader = request.getHeader("Authorization");
         Claims claims = JWT_Utils.getClaims(authHeader.substring(7));
-        int userId = (int)claims.get("id");
+        int userId = Integer.parseInt(claims.get("id").toString());
         boolean admin = (boolean)claims.get("admin");
         JsonNode sectionId = rootNode.get("sectionId");
         List<JsonNode> nodes = new ArrayList<>();

@@ -28,6 +28,9 @@ public class AllCourseBrief {
         types.add("endDate");
         types.add("ready");
         types.add("introduction");
+        types.add("sectionNum");
+        types.add("exerciseNum");
+        types.add("exercisesNum");
         this.courses = courseDao.select("ready", true, types);
     }
 
